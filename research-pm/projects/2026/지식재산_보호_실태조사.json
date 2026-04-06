@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-04-06T05:51:16.850Z",
+  "exportedAt": "2026-04-06T06:00:37.672Z",
   "project": {
     "id": "project_1775452684581_en7lp8",
     "name": "지식재산 보호 실태조사",
@@ -16,6 +16,30 @@
           "리스크 및 선행 의존사항 정리"
         ],
         "instanceId": "project_kickoff_1775454675553_mn8u1f"
+      },
+      {
+        "id": "field_prep",
+        "category": "현장/운영",
+        "title": "조사원 교육 및 현장 운영 준비",
+        "todos": [
+          "조사원 매뉴얼 및 응대 스크립트 정리",
+          "교육 일정 및 참석 대상 확정",
+          "현장 운영 기준 및 품질 포인트 공유",
+          "장비·계정·연락 체계 점검"
+        ],
+        "instanceId": "field_prep_1775454689277_x8vxep"
+      },
+      {
+        "id": "field_prep",
+        "category": "현장/운영",
+        "title": "조사원 교육 및 현장 운영 준비",
+        "todos": [
+          "조사원 매뉴얼 및 응대 스크립트 정리",
+          "교육 일정 및 참석 대상 확정",
+          "현장 운영 기준 및 품질 포인트 공유",
+          "장비·계정·연락 체계 점검"
+        ],
+        "instanceId": "field_prep_1775455236366_rn8c6y"
       }
     ],
     "activeStep": "project_kickoff_1775454675553_mn8u1f",
@@ -56,7 +80,7 @@
         }
       }
     ],
-    "lastModified": "2026-04-06T05:51:15.553Z"
+    "lastModified": "2026-04-06T06:00:36.366Z"
   },
   "github": {
     "owner": "junpal5",
