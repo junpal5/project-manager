@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-04-06T06:00:37.672Z",
+  "exportedAt": "2026-04-06T06:13:02.509Z",
   "project": {
     "id": "project_1775452684581_en7lp8",
     "name": "지식재산 보호 실태조사",
@@ -15,34 +15,22 @@
           "과업 범위 및 일정 가정 문서화",
           "리스크 및 선행 의존사항 정리"
         ],
-        "instanceId": "project_kickoff_1775454675553_mn8u1f"
+        "instanceId": "project_kickoff_1775455242563_z1p3rx"
       },
       {
-        "id": "field_prep",
-        "category": "현장/운영",
-        "title": "조사원 교육 및 현장 운영 준비",
+        "id": "project_kickoff",
+        "category": "기획/착수",
+        "title": "프로젝트 킥오프 및 범위 정의",
         "todos": [
-          "조사원 매뉴얼 및 응대 스크립트 정리",
-          "교육 일정 및 참석 대상 확정",
-          "현장 운영 기준 및 품질 포인트 공유",
-          "장비·계정·연락 체계 점검"
+          "발주 목적 및 기대 산출물 정리",
+          "핵심 이해관계자 및 의사결정 구조 확인",
+          "과업 범위 및 일정 가정 문서화",
+          "리스크 및 선행 의존사항 정리"
         ],
-        "instanceId": "field_prep_1775454689277_x8vxep"
-      },
-      {
-        "id": "field_prep",
-        "category": "현장/운영",
-        "title": "조사원 교육 및 현장 운영 준비",
-        "todos": [
-          "조사원 매뉴얼 및 응대 스크립트 정리",
-          "교육 일정 및 참석 대상 확정",
-          "현장 운영 기준 및 품질 포인트 공유",
-          "장비·계정·연락 체계 점검"
-        ],
-        "instanceId": "field_prep_1775455236366_rn8c6y"
+        "instanceId": "project_kickoff_1775455981215_bjwnaa"
       }
     ],
-    "activeStep": "project_kickoff_1775454675553_mn8u1f",
+    "activeStep": "project_kickoff_1775455242563_z1p3rx",
     "taskStatus": {},
     "notes": {},
     "versionName": "v1.0",
@@ -80,7 +68,7 @@
         }
       }
     ],
-    "lastModified": "2026-04-06T06:00:36.366Z"
+    "lastModified": "2026-04-06T06:13:01.215Z"
   },
   "github": {
     "owner": "junpal5",
