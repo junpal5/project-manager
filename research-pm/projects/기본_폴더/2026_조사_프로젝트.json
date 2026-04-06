@@ -1,11 +1,24 @@
 {
-  "exportedAt": "2026-04-06T05:39:11.337Z",
+  "exportedAt": "2026-04-06T05:45:59.068Z",
   "project": {
     "id": "project_1775452684581_en7lp8",
     "name": "2026 조사 프로젝트",
     "folder": "기본 폴더",
-    "selectedTasks": [],
-    "activeStep": null,
+    "selectedTasks": [
+      {
+        "id": "rq_design",
+        "category": "기획/착수",
+        "title": "연구 질문 및 조사 설계 확정",
+        "todos": [
+          "핵심 연구질문 및 검증 포인트 정의",
+          "조사 대상 및 모집단 정의 검토",
+          "표본 설계 방향 및 조사 방법론 확정",
+          "주요 성과 지표 합의"
+        ],
+        "instanceId": "rq_design_1775454357760_n1dx2e"
+      }
+    ],
+    "activeStep": "rq_design_1775454357760_n1dx2e",
     "taskStatus": {},
     "notes": {},
     "versionName": "v1.0",
@@ -43,7 +56,7 @@
         }
       }
     ],
-    "lastModified": "2026-04-06T05:36:31.312Z"
+    "lastModified": "2026-04-06T05:45:57.760Z"
   },
   "github": {
     "owner": "junpal5",
