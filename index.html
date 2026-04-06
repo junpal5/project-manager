@@ -1,0 +1,199 @@
+﻿
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>프로젝트 매니저</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#f4f7fb;--panel:rgba(255,255,255,.72);--line:rgba(148,163,184,.32);--line2:rgba(148,163,184,.48);--text:#172033;--text2:#52607a;--text3:#7b879c;--accent:#4f7cff;--accent2:#00bfa5;--success:#22c55e;--warn:#f59e0b;--danger:#ef4444;--shadow:0 24px 60px rgba(15,23,42,.12)}
+*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{min-height:100vh;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;color:var(--text);background:radial-gradient(circle at top left, rgba(79,124,255,.12), transparent 24%),radial-gradient(circle at top right, rgba(0,191,165,.10), transparent 26%),linear-gradient(180deg,#fbfcfe 0%,#f4f7fb 100%);overflow-x:hidden}body::before{content:'';position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.45) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.45) 1px, transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 82%)}
+button,input,select,textarea{font:inherit}button{border:none;cursor:pointer}input,select,textarea{width:100%;color:var(--text);background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:14px;padding:12px 14px;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(79,124,255,.6);box-shadow:0 0 0 4px rgba(79,124,255,.10)}textarea{min-height:110px;resize:vertical;line-height:1.7}
+.shell{width:min(1600px,calc(100% - 32px));margin:18px auto 36px}.glass{background:var(--panel);border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow);backdrop-filter:blur(22px) saturate(125%);-webkit-backdrop-filter:blur(22px) saturate(125%)}
+.hero{border-radius:28px;padding:24px 24px 18px;position:sticky;top:14px;z-index:20;overflow:hidden}.hero::after{content:'';position:absolute;right:-60px;bottom:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle, rgba(79,124,255,.12), transparent 70%)}.hero-top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}.brand{display:flex;gap:16px}.brand-mark{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,124,255,.95),rgba(0,191,165,.78));color:#fff;font-size:22px;font-weight:800;box-shadow:0 14px 30px rgba(79,124,255,.18)}.eyebrow{font:12px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}.brand h1{margin:0;font-size:32px;line-height:1.1;letter-spacing:-.03em}.brand p{margin:8px 0 0;font-size:15px;color:var(--text2)}
+.badges,.hero-actions,.tabs,.category-filter,.task-tags,.flow-controls,.nav-row,.version-actions{display:flex;gap:8px;flex-wrap:wrap}.status-badge,.tab-btn,.chip-btn,.mini-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.86);font-size:13px;font-weight:700;color:var(--text)}.status-badge .dot{width:9px;height:9px;border-radius:50%;background:currentColor}.status-local-idle,.status-sync-idle{color:#94a3b8}.status-local-saving,.status-sync-saving{color:var(--warn)}.status-local-saved,.status-sync-saved{color:var(--success)}.status-local-error,.status-sync-error{color:var(--danger)}
+.hero-grid{margin-top:18px;display:grid;grid-template-columns:2fr 1.3fr 1.3fr auto auto;gap:12px;align-items:end}.label{display:block;margin-bottom:7px;font-size:12px;font-weight:700;color:var(--text2)}.btn{min-height:46px;padding:0 16px;border-radius:14px;font-size:14px;font-weight:700}.btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),#7aa3ff)}.btn-secondary{color:var(--text);border:1px solid var(--line2);background:rgba(255,255,255,.88)}.btn-danger{color:#fff;background:rgba(239,68,68,.85);border:1px solid rgba(239,68,68,.32)}.tabs{margin:18px 0 14px}.tab-btn,.chip-btn{background:rgba(255,255,255,.72);color:var(--text2)}.tab-btn.active,.chip-btn.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2))}.page{display:none}.page.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}.card,.panel,.section-card{border-radius:24px;padding:18px}.stat-label,.panel-title,.section-label{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase}.stat-value{margin-top:10px;font-size:34px;font-weight:800;letter-spacing:-.04em}.stat-sub,.panel-note,.subtle{margin-top:8px;font-size:14px;color:var(--text3);line-height:1.6}
+.workflow{display:grid;grid-template-columns:330px minmax(320px,1fr) 420px;gap:14px;align-items:start}.panel-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:16px}.task-card,.progress-card,.flow-item,.todo-item,.helper,.version-item{padding:16px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.76)}.task-card{width:100%;text-align:left;margin-bottom:10px}.task-card.selected,.flow-item.active{border-color:rgba(79,124,255,.5);background:linear-gradient(135deg,rgba(79,124,255,.12),rgba(0,191,165,.04))}.task-cat{font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:8px}.task-title,.flow-title{font-size:17px;font-weight:800;line-height:1.45;color:var(--text)}.task-tag{padding:5px 10px;border-radius:999px;background:rgba(79,124,255,.08);color:var(--text2);font-size:12px;font-weight:600}.plus{width:30px;height:30px;display:grid;place-items:center;border-radius:999px;background:rgba(79,124,255,.08);font-size:18px;font-weight:800;margin-left:auto;color:var(--text)}
+.empty{padding:56px 20px;text-align:center;color:var(--text3);font-size:15px;line-height:1.7}.progress-meta,.detail-top,.version-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.track{height:8px;border-radius:999px;background:rgba(148,163,184,.18);overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}.flow-item{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;margin-bottom:10px}.flow-item.done{border-color:rgba(34,197,94,.34)}.flow-num{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;font-size:14px;font-weight:800;color:var(--text2);background:rgba(79,124,255,.08)}.flow-item.active .flow-num{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}.flow-cat,.version-date{font-size:12px;color:var(--text2)}.flow-pct{font-size:14px;font-weight:700;color:var(--text2)}.icon-btn{width:34px;height:34px;border-radius:12px;color:var(--text2);background:rgba(255,255,255,.7);border:1px solid var(--line)}
+.detail-title{margin:0;font-size:26px;line-height:1.2}.detail-pct{font-size:42px;font-weight:800;letter-spacing:-.04em}.todo-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;cursor:pointer}.todo-item.done{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.08)}.todo-check{width:22px;height:22px;flex:0 0 22px;border-radius:7px;border:2px solid rgba(148,163,184,.55);display:grid;place-items:center;font-size:13px;color:transparent}.todo-item.done .todo-check{color:#fff;border-color:var(--success);background:var(--success)}.todo-text{font-size:15px;font-weight:600;line-height:1.6}.todo-item.done .todo-text{color:var(--text2);text-decoration:line-through}.complete{margin-top:18px;padding:18px;border-radius:18px;border:1px solid rgba(34,197,94,.28);background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(0,191,165,.06))}.todo-editor{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.todo-edit-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:8px}.todo-edit-input{min-height:44px;padding:10px 12px;border-radius:12px}.todo-add-btn{width:100%;justify-content:center}
+.data-grid{display:grid;grid-template-columns:1.2fr .95fr;gap:14px}.stack{display:grid;gap:12px}.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.helper p{margin:0;font-size:13px;color:var(--text2);line-height:1.6}.version-title{font-size:16px;font-weight:800}.toast{position:fixed;right:22px;bottom:22px;padding:12px 16px;border-radius:16px;background:rgba(255,255,255,.96);border:1px solid var(--line2);color:var(--text);box-shadow:var(--shadow);transform:translateY(16px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:100}.toast.show{opacity:1;transform:translateY(0)}
+@media (max-width:1240px){.hero-grid{grid-template-columns:1fr 1fr}.workflow,.data-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.shell{width:min(100% - 16px,1600px);margin:10px auto 24px}.hero{padding:18px 16px 16px;position:static}.brand h1{font-size:28px}.brand-mark{width:50px;height:50px;border-radius:16px;font-size:20px}.hero-grid,.stats,.form2,.form3{grid-template-columns:1fr}.workflow{gap:12px}.panel,.section-card,.card{padding:16px}.flow-item{grid-template-columns:auto 1fr auto}.detail-top{text-align:left}.nav-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="hero glass">
+    <div class="hero-top">
+      <div class="brand"><div class="brand-mark">PM</div><div><div class="eyebrow">Research Operations</div><h1>프로젝트 매니저</h1><p>사회조사 2부문 2실 3팀</p></div></div>
+      <div>
+        <div class="badges">
+          <div id="localStatusBadge" class="status-badge status-local-idle"><span class="dot"></span><span>저장 대기</span></div>
+          <div id="syncStatusBadge" class="status-badge status-sync-idle"><span class="dot"></span><span>GitHub 미연결</span></div>
+        </div>
+        <div class="hero-actions" style="margin-top:10px;justify-content:flex-end">
+          <button class="btn btn-secondary" onclick="importProjectJson()">JSON 불러오기</button>
+          <button class="btn btn-secondary" onclick="downloadCurrentProject()">JSON 내려받기</button>
+          <button class="btn btn-danger" onclick="resetCurrentProject()">현재 프로젝트 초기화</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-grid">
+      <label><span class="label">프로젝트 선택</span><select id="projectSelect"></select></label>
+      <label><span class="label">프로젝트명</span><input id="projectNameInput" type="text" placeholder="예: 2026 서울시 청년 생활실태조사" /></label>
+      <label><span class="label">프로젝트 폴더</span><input id="projectFolderInput" type="text" placeholder="예: 복지조사 / 2실 / 운영중" /></label>
+      <button class="btn btn-primary" onclick="createProject()">새 프로젝트</button>
+      <button class="btn btn-secondary" onclick="duplicateProject()">프로젝트 복제</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="workflow" onclick="setTab('workflow')">워크플로우</button>
+    <button class="tab-btn" data-tab="data" onclick="setTab('data')">데이터 관리</button>
+  </div>
+  <section id="workflowPage" class="page active">
+    <div class="stats">
+      <div class="card glass"><div class="stat-label">전체 진행률</div><div id="overallPctStat" class="stat-value">0%</div><div id="overallMetaStat" class="stat-sub">등록된 과업이 없습니다.</div></div>
+      <div class="card glass"><div class="stat-label">선택 과업 수</div><div id="selectedTaskCountStat" class="stat-value">0</div><div class="stat-sub">프로젝트별 워크플로우 커스터마이징</div></div>
+      <div class="card glass"><div class="stat-label">완료 체크리스트</div><div id="completedTodoStat" class="stat-value">0</div><div class="stat-sub">세부 항목 완료 수</div></div>
+      <div class="card glass"><div class="stat-label">최종 수정</div><div id="lastModifiedStat" class="stat-value" style="font-size:22px">-</div><div class="stat-sub">최근 저장 시각</div></div>
+    </div>
+    <div class="workflow">
+      <aside class="panel glass"><div class="panel-head"><div class="panel-title" style="white-space:nowrap">과업 라이브러리</div></div><div id="categoryFilter" class="category-filter"></div><div id="taskLibrary"></div></aside>
+      <section class="panel glass"><div class="panel-head"><div class="panel-title">과업 단계</div><div class="panel-note">필요 단계만 선택하고 순서를 조정할 수 있습니다.</div></div><div id="workflowPanel"></div></section>
+      <aside class="panel glass"><div class="panel-head"><div class="panel-title">세부 할 일 목록</div><div class="panel-note">선택한 단계의 할 일과 메모를 관리합니다.</div></div><div id="detailPanel"></div></aside>
+    </div>
+  </section>
+
+  <section id="dataPage" class="page">
+    <div class="data-grid">
+      <div class="stack">
+        <div class="section-card glass">
+          <h3>버전 및 파일 관리</h3>
+          <div class="form2">
+            <label><span class="label">버전명</span><input id="versionNameInput" type="text" placeholder="예: v1.2_표본설계_확정" /></label>
+            <label><span class="label">최종 수정일</span><input id="lastModifiedInput" type="text" readonly /></label>
+          </div>
+          <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
+            <button class="btn btn-primary" onclick="saveVersionSnapshot()">버전 저장</button>
+            <button class="btn btn-secondary" onclick="downloadCurrentProject()">현재 JSON 내려받기</button>
+            <button class="btn btn-secondary" onclick="importProjectJson()">JSON 불러오기</button>
+          </div>
+          <div class="helper" style="margin-top:14px"><strong>관리 범위</strong><p>버전명, 버전 히스토리, 최종 수정일, JSON 파일 불러오기/내려받기를 한 곳에서 관리합니다.</p></div>
+        </div>
+        <div class="section-card glass"><h3>버전 히스토리</h3><div id="versionHistoryList" class="stack"></div></div>
+      </div>
+      <div class="stack">
+        <div class="section-card glass">
+          <h3>GitHub 자동 저장 설정</h3>
+          <p class="subtle">프로젝트를 수정하면 JSON 파일을 GitHub 저장소에 자동 업로드합니다. 토큰은 브라우저 로컬 저장소에만 저장됩니다.</p>
+          <div class="form2" style="margin-top:12px">
+            <label><span class="label">Owner</span><input id="githubOwnerInput" type="text" placeholder="예: your-org" /></label>
+            <label><span class="label">Repository</span><input id="githubRepoInput" type="text" placeholder="예: survey-pm-data" /></label>
+          </div>
+          <div class="form3" style="margin-top:12px">
+            <label><span class="label">Branch</span><input id="githubBranchInput" type="text" placeholder="main" /></label>
+            <label><span class="label">기본 경로</span><input id="githubBasePathInput" type="text" placeholder="research-pm/projects" /></label>
+            <label><span class="label">파일명 규칙</span><input id="githubFileNameInput" type="text" placeholder="project" /></label>
+          </div>
+          <label style="display:block;margin-top:12px"><span class="label">Personal Access Token</span><input id="githubTokenInput" type="password" placeholder="github_pat_..." /></label>
+          <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
+            <button class="btn btn-primary" onclick="saveGithubSettings()">GitHub 설정 저장</button>
+            <button class="btn btn-secondary" onclick="syncCurrentProjectToGithub('manual')">지금 동기화</button>
+            <button class="btn btn-secondary" onclick="clearGithubSettings()">연동 해제</button>
+          </div>
+        </div>
+        <div class="section-card glass">
+          <h3>동기화 안내</h3>
+          <div class="helper"><strong>자동 저장 방식</strong><p>로컬 저장 후 약간의 지연을 두고 GitHub Contents API로 JSON 파일을 갱신합니다. 저장 배지는 저장 완료 여부를, 동기화 배지는 GitHub 반영 상태를 표시합니다.</p></div>
+          <div class="helper" style="margin-top:12px"><strong>권장 경로 예시</strong><p><code>research-pm/projects/복지조사/2026_서울시_청년_생활실태조사.json</code> 형태로 자동 생성됩니다.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+const MASTER_TASKS=[
+{id:'project_kickoff',category:'기획/착수',title:'프로젝트 킥오프 및 범위 정의',todos:['발주 목적 및 기대 산출물 정리','핵심 이해관계자 및 의사결정 구조 확인','과업 범위 및 일정 가정 문서화','리스크 및 선행 의존사항 정리']},
+{id:'rq_design',category:'기획/착수',title:'연구 질문 및 조사 설계 확정',todos:['핵심 연구질문 및 검증 포인트 정의','조사 대상 및 모집단 정의 검토','표본 설계 방향 및 조사 방법론 확정','주요 성과 지표 합의']},
+{id:'questionnaire',category:'설문/도구',title:'설문지 및 조사도구 설계',todos:['측정 개념별 문항 초안 작성','응답 흐름 및 스킵 로직 설계','문항 길이 및 난도 검토','최종 설문지 버전명 확정']},
+{id:'pilot_test',category:'설문/도구',title:'파일럿 테스트 및 문항 보정',todos:['파일럿 표본 및 테스트 시나리오 선정','응답 소요시간 및 이탈 지점 기록','이해도 낮은 문항 및 오류 수정','보정 결과 최종안 반영']},
+{id:'field_prep',category:'현장/운영',title:'조사원 교육 및 현장 운영 준비',todos:['조사원 매뉴얼 및 응대 스크립트 정리','교육 일정 및 참석 대상 확정','현장 운영 기준 및 품질 포인트 공유','장비·계정·연락 체계 점검']},
+{id:'fieldwork',category:'현장/운영',title:'본 조사 진행 및 응답률 관리',todos:['일일 응답률 및 목표 달성 추이 모니터링','거절·결번·대체 표본 이슈 기록','현장 이슈 수집 및 즉시 대응','중간 점검 결과 공유']},
+{id:'quality_control',category:'품질/QC',title:'품질 점검 및 검증',todos:['응답 이상치 및 중복 응답 여부 점검','조사 규정 위반 사례 확인','QC 결과 및 조치 내역 기록','최종 데이터 승인 절차 완료']},
+{id:'data_cleaning',category:'데이터/분석',title:'데이터 클리닝 및 코딩',todos:['원자료 백업 및 버전 관리 체계 점검','결측·이상치·무성의 응답 규칙 적용','코딩 규칙 및 파생변수 정리','분석용 데이터셋 확정']},
+{id:'analysis',category:'데이터/분석',title:'분석 및 인사이트 도출',todos:['기초 통계 및 핵심 지표 산출','세부 집단별 비교 분석 진행','핵심 인사이트 및 해석 유의점 정리','보고서용 표 및 차트 확정']},
+{id:'reporting',category:'보고/산출',title:'보고서 작성 및 산출물 정리',todos:['보고서 목차 및 스토리라인 점검','핵심 결과 요약 및 시사점 정리','납품 파일 목록 및 산출물 버전 확인','최종 보고 및 아카이브 완료']}
+];
+const STORAGE_KEY='research_pm_multi_v2'; let saveTimer=null, syncTimer=null, toastTimer=null;
+const defaultAppState=()=>({currentTab:'workflow',currentProjectId:null,activeCategory:'전체',github:{owner:'',repo:'',branch:'main',basePath:'research-pm/projects',fileNameRule:'project',token:''},projects:[]});
+const defaultProject=(name='새 조사 프로젝트')=>({id:createId('project'),name,folder:'기본 폴더',selectedTasks:[],activeStep:null,taskStatus:{},notes:{},versionName:'v1.0',versionHistory:[],lastModified:new Date().toISOString()});
+let appState=defaultAppState();
+function createId(prefix){return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`}
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function fmt(v){if(!v)return '-';const d=new Date(v);if(Number.isNaN(d.getTime()))return '-';return new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
+function slug(v){const s=String(v||'').trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g,' ').replace(/\s+/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'');return s||'project'}
+function project(){return appState.projects.find(p=>p.id===appState.currentProjectId)||null}
+function ensureProject(){if(!appState.projects.length){const p=defaultProject('2026 조사 프로젝트');appState.projects.push(p);appState.currentProjectId=p.id}if(!project())appState.currentProjectId=appState.projects[0].id}
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){const raw=JSON.parse(s);appState={...defaultAppState(),...raw,github:{...defaultAppState().github,...(raw.github||{})},projects:Array.isArray(raw.projects)?raw.projects.map(p=>({...defaultProject(p?.name||'불러온 프로젝트'),...p,selectedTasks:Array.isArray(p.selectedTasks)?p.selectedTasks:[],taskStatus:p.taskStatus||{},notes:p.notes||{},versionHistory:Array.isArray(p.versionHistory)?p.versionHistory:[]})):[]}}}catch(e){console.warn(e)}ensureProject()}
+function hasGithubConfig(){const g=appState.github;return !!(g.owner&&g.repo&&g.branch&&g.token)}
+function setLocalBadge(status,label){const el=document.getElementById('localStatusBadge');el.className=`status-badge status-local-${status}`;el.innerHTML=`<span class="dot"></span><span>${label}</span>`}
+function setSyncBadge(status,label){const el=document.getElementById('syncStatusBadge');el.className=`status-badge status-sync-${status}`;el.innerHTML=`<span class="dot"></span><span>${label}</span>`}
+function saveState(reason='save',skipSync=false,skipRender=false){const p=project();if(p)p.lastModified=new Date().toISOString();setLocalBadge('saving','저장 중');clearTimeout(saveTimer);saveTimer=setTimeout(()=>{try{localStorage.setItem(STORAGE_KEY,JSON.stringify(appState));setLocalBadge('saved','저장 완료');if(!skipSync)queueSync(reason)}catch(e){console.warn(e);setLocalBadge('error','저장 실패')}if(!skipRender)render(false)},120)}
+function queueSync(reason='auto'){clearTimeout(syncTimer);if(!hasGithubConfig()){setSyncBadge('idle','GitHub 미연결');return}syncTimer=setTimeout(()=>syncCurrentProjectToGithub(reason),900)}
+function categories(){return ['전체',...new Set(MASTER_TASKS.map(t=>t.category))]}
+function stepProgress(p,t){const done=t.todos.filter((_,i)=>p.taskStatus[`${t.instanceId}-${i}`]).length;return {done,total:t.todos.length,pct:t.todos.length?Math.round(done/t.todos.length*100):0}}
+function overallProgress(p){if(!p.selectedTasks.length)return 0;const total=p.selectedTasks.reduce((s,t)=>s+t.todos.length,0);const done=p.selectedTasks.reduce((s,t)=>s+t.todos.filter((_,i)=>p.taskStatus[`${t.instanceId}-${i}`]).length,0);return total?Math.round(done/total*100):0}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+function setTab(tab){appState.currentTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.getElementById('workflowPage').classList.toggle('active',tab==='workflow');document.getElementById('dataPage').classList.toggle('active',tab==='data')}
+function renderSelect(){document.getElementById('projectSelect').innerHTML=appState.projects.map(p=>`<option value="${p.id}" ${p.id===appState.currentProjectId?'selected':''}>${esc((p.folder||'기본 폴더')+' / '+(p.name||'이름 없는 프로젝트'))}</option>`).join('')}
+function renderStats(){const p=project();const total=p.selectedTasks.reduce((n,t)=>n+t.todos.length,0);const done=p.selectedTasks.reduce((n,t)=>n+t.todos.filter((_,i)=>p.taskStatus[`${t.instanceId}-${i}`]).length,0);document.getElementById('overallPctStat').textContent=`${overallProgress(p)}%`;document.getElementById('overallMetaStat').textContent=total?`${done} / ${total} 체크리스트 완료`:'등록된 과업이 없습니다.';document.getElementById('selectedTaskCountStat').textContent=String(p.selectedTasks.length);document.getElementById('completedTodoStat').textContent=String(done);document.getElementById('lastModifiedStat').textContent=fmt(p.lastModified)}
+function renderCategory(){document.getElementById('categoryFilter').innerHTML=categories().map(c=>`<button class="chip-btn ${appState.activeCategory===c?'active':''}" onclick="setCategory('${esc(c)}')">${esc(c)}</button>`).join('')}
+function renderLibrary(){const p=project();const filtered=MASTER_TASKS.filter(t=>appState.activeCategory==='전체'||t.category===appState.activeCategory);document.getElementById('taskLibrary').innerHTML=filtered.map(t=>{const selected=p.selectedTasks.some(x=>x.id===t.id);return `<button class="task-card ${selected?'selected':''}" onclick="addTask('${t.id}')"><div class="task-cat">${esc(t.category)}</div><div class="task-title">${esc(t.title)}</div><div class="task-tags">${t.todos.slice(0,3).map(todo=>`<span class="task-tag">${esc(todo)}</span>`).join('')}</div><div class="plus">${selected?'✓':'+'}</div></button>`}).join('')}
+function renderWorkflow(){const p=project();const el=document.getElementById('workflowPanel');if(!p.selectedTasks.length){el.innerHTML='<div class="empty">왼쪽 라이브러리에서 과업을 추가하면<br />프로젝트별 워크플로우를 구성할 수 있습니다.</div>';return}const overall=overallProgress(p);el.innerHTML=`<div class="progress-card"><div class="progress-meta"><strong>프로젝트 전체 진행률</strong><span>${overall}%</span></div><div class="track"><div class="fill" style="width:${overall}%"></div></div></div>${p.selectedTasks.map((t,i)=>{const prog=stepProgress(p,t);const active=p.activeStep===t.instanceId;return `<div class="flow-item ${active?'active':''} ${prog.pct===100?'done':''}" onclick="selectStep('${t.instanceId}')"><div class="flow-num">${prog.pct===100?'✓':i+1}</div><div><div class="flow-cat">${esc(t.category)}</div><div class="flow-title">${esc(t.title)}</div><div class="track" style="margin-top:8px"><div class="fill" style="width:${prog.pct}%"></div></div></div><div class="flow-pct">${prog.pct}%</div><button class="icon-btn" onclick="removeTask(event,'${t.instanceId}')">×</button></div>`}).join('')}<div class="flow-controls"><button class="btn btn-secondary" onclick="moveStep(-1)">위로 이동</button><button class="btn btn-secondary" onclick="moveStep(1)">아래로 이동</button></div>`}
+function renderDetail(){const p=project();const el=document.getElementById('detailPanel');if(!p.activeStep){el.innerHTML='<div class="empty">워크플로우 단계 하나를 선택하면<br />세부 체크리스트와 메모가 표시됩니다.</div>';return}const t=p.selectedTasks.find(x=>x.instanceId===p.activeStep);if(!t){p.activeStep=null;renderDetail();return}const prog=stepProgress(p,t);const idx=p.selectedTasks.findIndex(x=>x.instanceId===t.instanceId);const note=p.notes[t.instanceId]||'';el.innerHTML=`<div class="detail-top"><div><div class="task-cat">${esc(t.category)}</div><h2 class="detail-title">${esc(t.title)}</h2><p class="stat-sub">단계 ${idx+1} / ${p.selectedTasks.length}</p></div><div><div class="detail-pct">${prog.pct}%</div><div class="stat-sub">${prog.done} / ${prog.total} 완료</div></div></div><div class="track"><div class="fill" style="width:${prog.pct}%"></div></div><div class="section-label" style="margin:18px 0 10px">Checklist</div>${t.todos.map((todo,i)=>{const checked=!!p.taskStatus[`${t.instanceId}-${i}`];return `<div class="todo-item ${checked?'done':''}" onclick="toggleTodo('${t.instanceId}',${i})"><div class="todo-check">${checked?'✓':''}</div><div class="todo-text">${esc(todo)}</div></div>`}).join('')}${prog.pct===100?'<div class="complete"><strong>이 단계가 완료되었습니다.</strong><div class="stat-sub">필요하다면 현재 상태를 버전으로 저장해 두세요.</div></div>':''}<div class="todo-editor"><div class="section-label" style="margin:0 0 10px">체크리스트 템플릿 편집</div>${t.todos.map((todo,i)=>`<div class="todo-edit-row"><input class="todo-edit-input" type="text" value="${esc(todo)}" oninput="updateTodoText('${t.instanceId}',${i},this.value)" /><button class="btn btn-secondary" type="button" onclick="removeTodoItem('${t.instanceId}',${i})">삭제</button></div>`).join('')}<button class="btn btn-secondary todo-add-btn" type="button" onclick="addTodoItem('${t.instanceId}')">할 일 추가</button></div><div class="section-label" style="margin:18px 0 10px">Notes</div><textarea placeholder="조사 일정, 이슈, 담당자 메모 등을 기록하세요." oninput="saveNote('${t.instanceId}', this.value)">${esc(note)}</textarea><div class="nav-row" style="margin-top:14px"><button class="btn btn-secondary" onclick="moveActiveStep(-1)">이전 단계</button><button class="btn btn-primary" onclick="moveActiveStep(1)">다음 단계</button></div>`}
+function renderVersions(){const p=project();const el=document.getElementById('versionHistoryList');if(!p.versionHistory.length){el.innerHTML='<div class="empty">아직 저장된 버전이 없습니다.<br />중요한 시점마다 버전 저장을 눌러 히스토리를 남길 수 있습니다.</div>';return}el.innerHTML=[...p.versionHistory].reverse().map(v=>`<div class="version-item"><div class="version-top"><div><div class="version-title">${esc(v.name)}</div><div class="version-date">${fmt(v.savedAt)}</div></div><div class="mini-badge">${esc(v.folder||'기본 폴더')}</div></div><div style="margin-top:10px" class="version-actions"><span class="mini-badge">과업 ${v.metrics.taskCount}개</span><span class="mini-badge">완료 ${v.metrics.completedTodos}/${v.metrics.totalTodos}</span></div><div class="version-actions" style="margin-top:12px"><button class="btn btn-secondary" onclick="restoreVersion('${v.id}')">이 버전 복원</button><button class="btn btn-secondary" onclick="downloadVersion('${v.id}')">JSON 저장</button></div></div>`).join('')}
+function renderData(){const p=project();document.getElementById('versionNameInput').value=p.versionName||'';document.getElementById('lastModifiedInput').value=fmt(p.lastModified);document.getElementById('githubOwnerInput').value=appState.github.owner||'';document.getElementById('githubRepoInput').value=appState.github.repo||'';document.getElementById('githubBranchInput').value=appState.github.branch||'main';document.getElementById('githubBasePathInput').value=appState.github.basePath||'';document.getElementById('githubFileNameInput').value=appState.github.fileNameRule||'project';document.getElementById('githubTokenInput').value=appState.github.token||'';renderVersions()}
+function render(full=true){ensureProject();const p=project();renderSelect();document.getElementById('projectNameInput').value=p.name||'';document.getElementById('projectFolderInput').value=p.folder||'';renderStats();renderCategory();renderLibrary();renderWorkflow();renderDetail();renderData();if(full)setTab(appState.currentTab||'workflow');if(!hasGithubConfig())setSyncBadge('idle','GitHub 미연결')}
+function setCategory(c){appState.activeCategory=c;renderCategory();renderLibrary()}
+function addTask(id){const p=project(), t=MASTER_TASKS.find(x=>x.id===id);if(!p||!t)return;const instanceId=createId(id);p.selectedTasks.push({...clone(t),instanceId});if(!p.activeStep)p.activeStep=instanceId;saveState('task_add');render();toast(`"${t.title}" 과업을 추가했습니다.`)}
+function removeTask(e,id){e.stopPropagation();const p=project();p.selectedTasks=p.selectedTasks.filter(t=>t.instanceId!==id);if(p.activeStep===id)p.activeStep=p.selectedTasks[0]?.instanceId||null;Object.keys(p.taskStatus).forEach(k=>{if(k.startsWith(`${id}-`))delete p.taskStatus[k]});delete p.notes[id];saveState('task_remove');render()}
+function selectStep(id){project().activeStep=id;render()}
+function toggleTodo(id,i){const p=project();const key=`${id}-${i}`;p.taskStatus[key]=!p.taskStatus[key];saveState('todo_toggle');render()}
+function saveNote(id,v){project().notes[id]=v;saveState('note',false,true)}
+function updateTodoText(id,i,value){const p=project();const t=p.selectedTasks.find(x=>x.instanceId===id);if(!t)return;t.todos[i]=value;saveState('todo_edit',false,true)}
+function addTodoItem(id){const p=project();const t=p.selectedTasks.find(x=>x.instanceId===id);if(!t)return;t.todos.push('새 할 일');saveState('todo_add');render();toast('체크리스트 항목을 추가했습니다.')}
+function removeTodoItem(id,i){const p=project();const t=p.selectedTasks.find(x=>x.instanceId===id);if(!t||t.todos.length<=1)return;const nextStatus={};Object.entries(p.taskStatus).forEach(([key,val])=>{if(!key.startsWith(`${id}-`)){nextStatus[key]=val;return}const idx=Number(key.slice(id.length+1));if(idx<i)nextStatus[key]=val;else if(idx>i)nextStatus[`${id}-${idx-1}`]=val});p.taskStatus=nextStatus;t.todos.splice(i,1);saveState('todo_remove');render()}
+function moveActiveStep(dir){const p=project();if(!p.activeStep)return;const i=p.selectedTasks.findIndex(t=>t.instanceId===p.activeStep), n=i+dir; if(n<0||n>=p.selectedTasks.length)return; p.activeStep=p.selectedTasks[n].instanceId; render()}
+function moveStep(dir){const p=project();if(!p.activeStep)return;const i=p.selectedTasks.findIndex(t=>t.instanceId===p.activeStep), n=i+dir; if(i<0||n<0||n>=p.selectedTasks.length)return; [p.selectedTasks[i],p.selectedTasks[n]]=[p.selectedTasks[n],p.selectedTasks[i]]; saveState('reorder'); render()}
+function createProject(){const p=defaultProject(`새 조사 프로젝트 ${appState.projects.length+1}`);appState.projects.push(p);appState.currentProjectId=p.id;saveState('project_create',true);render();toast('새 프로젝트를 만들었습니다.')}
+function duplicateProject(){const cur=project();if(!cur)return;const copy=clone(cur);copy.id=createId('project');copy.name=`${cur.name} 복사본`;copy.lastModified=new Date().toISOString();copy.versionHistory=[];appState.projects.push(copy);appState.currentProjectId=copy.id;saveState('project_duplicate',true);render();toast('현재 프로젝트를 복제했습니다.')}
+function resetCurrentProject(){const cur=project();if(!cur)return;if(!confirm(`"${cur.name}" 프로젝트를 초기화할까요?`))return;const fresh=defaultProject(cur.name);fresh.id=cur.id;fresh.folder=cur.folder;appState.projects[appState.projects.findIndex(p=>p.id===cur.id)]=fresh;saveState('project_reset');render()}
+function payload(p=project()){return {exportedAt:new Date().toISOString(),project:p,github:{owner:appState.github.owner,repo:appState.github.repo,branch:appState.github.branch,basePath:appState.github.basePath}}}
+function downloadBlob(name,content){const blob=new Blob([content],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+function downloadCurrentProject(){const p=project();downloadBlob(`${slug(p.folder)}_${slug(p.name)}.json`,JSON.stringify(payload(p),null,2));toast('현재 프로젝트 JSON을 내려받았습니다.')}
+function downloadVersion(id){const p=project(), v=p?.versionHistory.find(x=>x.id===id);if(!v)return;downloadBlob(`${slug(p.folder)}_${slug(v.name)}.json`,JSON.stringify(v.snapshot,null,2));toast('선택한 버전을 JSON으로 저장했습니다.')}
+function importProjectJson(){const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=e=>{const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const raw=JSON.parse(ev.target.result);const imported=raw.project?raw.project:raw;const p={...defaultProject(imported.name||file.name.replace(/\.json$/i,'')),...imported,id:createId('project'),selectedTasks:Array.isArray(imported.selectedTasks)?imported.selectedTasks:[],taskStatus:imported.taskStatus||{},notes:imported.notes||{},versionHistory:Array.isArray(imported.versionHistory)?imported.versionHistory:[]};const replace=confirm('현재 프로젝트를 덮어쓸까요?\n취소를 누르면 새 프로젝트로 추가합니다.');if(replace){const cur=project();p.id=cur.id;appState.projects[appState.projects.findIndex(x=>x.id===cur.id)]=p;appState.currentProjectId=p.id}else{appState.projects.push(p);appState.currentProjectId=p.id}saveState('import');render();toast('JSON 파일을 불러왔습니다.')}catch(err){alert('JSON 형식이 올바르지 않습니다.')}};r.readAsText(file,'utf-8')};input.click()}
+function saveVersionSnapshot(){const p=project();const metrics={taskCount:p.selectedTasks.length,totalTodos:p.selectedTasks.reduce((s,t)=>s+t.todos.length,0),completedTodos:p.selectedTasks.reduce((s,t)=>s+t.todos.filter((_,i)=>p.taskStatus[`${t.instanceId}-${i}`]).length,0)};p.versionHistory.push({id:createId('version'),name:p.versionName||`v${p.versionHistory.length+1}.0`,savedAt:new Date().toISOString(),folder:p.folder,metrics,snapshot:payload(clone(p))});saveState('version_snapshot');renderVersions();toast('버전 히스토리에 현재 상태를 저장했습니다.')}
+function restoreVersion(id){const cur=project(), v=cur?.versionHistory.find(x=>x.id===id);if(!v)return;if(!confirm(`"${v.name}" 버전으로 복원할까요?`))return;const restored={...defaultProject(cur.name),...clone(v.snapshot.project),id:cur.id,versionHistory:cur.versionHistory};appState.projects[appState.projects.findIndex(p=>p.id===cur.id)]=restored;saveState('version_restore');render();toast('선택한 버전으로 복원했습니다.')}
+function saveGithubSettings(){appState.github.owner=document.getElementById('githubOwnerInput').value.trim();appState.github.repo=document.getElementById('githubRepoInput').value.trim();appState.github.branch=document.getElementById('githubBranchInput').value.trim()||'main';appState.github.basePath=document.getElementById('githubBasePathInput').value.trim()||'research-pm/projects';appState.github.fileNameRule=document.getElementById('githubFileNameInput').value.trim()||'project';appState.github.token=document.getElementById('githubTokenInput').value.trim();saveState('github_settings',true);setSyncBadge(hasGithubConfig()?'idle':'error',hasGithubConfig()?'GitHub 연결 준비':'설정 부족');toast('GitHub 설정을 저장했습니다.')}
+function clearGithubSettings(){appState.github=defaultAppState().github;saveState('github_clear',true);renderData();setSyncBadge('idle','GitHub 미연결');toast('GitHub 연동 정보를 지웠습니다.')}
+function githubPath(p=project()){const folder=slug(p?.folder||'기본_폴더');const name=slug(p?.name||'project');const base=appState.github.basePath.replace(/^\/+|\/+$/g,'');const rule=(appState.github.fileNameRule||'project').trim().toLowerCase();const file=rule==='project'?`${name}.json`:`${slug(appState.github.fileNameRule)}.json`;return `${base}/${folder}/${file}`}
+async function syncCurrentProjectToGithub(reason='auto'){const p=project();if(!p||!hasGithubConfig()){setSyncBadge('idle','GitHub 미연결');return}setSyncBadge('saving',reason==='manual'?'GitHub 동기화 중':'자동 동기화 중');const path=githubPath(p);const api=`https://api.github.com/repos/${encodeURIComponent(appState.github.owner)}/${encodeURIComponent(appState.github.repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;const headers={Authorization:`Bearer ${appState.github.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'};try{let sha=null;const getRes=await fetch(`${api}?ref=${encodeURIComponent(appState.github.branch)}`,{method:'GET',headers});if(getRes.ok){const current=await getRes.json();sha=current.sha||null}else if(getRes.status!==404){throw new Error(`GitHub 조회 실패 (${getRes.status})`)}const content=JSON.stringify(payload(p),null,2);const body={message:`[research-pm] ${p.name} 자동 저장`,content:btoa(unescape(encodeURIComponent(content))),branch:appState.github.branch};if(sha)body.sha=sha;const putRes=await fetch(api,{method:'PUT',headers,body:JSON.stringify(body)});if(!putRes.ok){throw new Error(`GitHub 저장 실패 (${putRes.status})`)}setSyncBadge('saved','GitHub 저장 완료');toast('GitHub에 JSON 자동 저장을 완료했습니다.')}catch(err){console.warn(err);setSyncBadge('error','GitHub 동기화 실패');toast('GitHub 동기화에 실패했습니다. 설정과 토큰 권한을 확인하세요.')}}
+window.setCategory=setCategory;window.addTask=addTask;window.removeTask=removeTask;window.selectStep=selectStep;window.toggleTodo=toggleTodo;window.saveNote=saveNote;window.updateTodoText=updateTodoText;window.addTodoItem=addTodoItem;window.removeTodoItem=removeTodoItem;window.moveStep=moveStep;window.moveActiveStep=moveActiveStep;window.createProject=createProject;window.duplicateProject=duplicateProject;window.resetCurrentProject=resetCurrentProject;window.downloadCurrentProject=downloadCurrentProject;window.importProjectJson=importProjectJson;window.saveVersionSnapshot=saveVersionSnapshot;window.restoreVersion=restoreVersion;window.downloadVersion=downloadVersion;window.saveGithubSettings=saveGithubSettings;window.clearGithubSettings=clearGithubSettings;window.syncCurrentProjectToGithub=syncCurrentProjectToGithub;window.setTab=setTab;
+loadState();
+document.getElementById('projectSelect').addEventListener('change',e=>{appState.currentProjectId=e.target.value;render();saveState('switch',true)});
+document.getElementById('projectNameInput').addEventListener('input',e=>{const p=project();p.name=e.target.value||'이름 없는 프로젝트';saveState('rename');renderSelect()});
+document.getElementById('projectFolderInput').addEventListener('input',e=>{const p=project();p.folder=e.target.value||'기본 폴더';saveState('folder');renderSelect()});
+document.getElementById('versionNameInput').addEventListener('input',e=>{project().versionName=e.target.value;saveState('version_name',true)});
+render();
+</script>
+</body>
+</html>
+
