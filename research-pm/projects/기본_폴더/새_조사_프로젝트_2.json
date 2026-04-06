@@ -1,0 +1,21 @@
+{
+  "exportedAt": "2026-04-06T05:51:05.393Z",
+  "project": {
+    "id": "project_1775454663903_1fgdyh",
+    "name": "새 조사 프로젝트 2",
+    "folder": "기본 폴더",
+    "selectedTasks": [],
+    "activeStep": null,
+    "taskStatus": {},
+    "notes": {},
+    "versionName": "v1.0",
+    "versionHistory": [],
+    "lastModified": "2026-04-06T05:51:03.903Z"
+  },
+  "github": {
+    "owner": "junpal5",
+    "repo": "project-manager",
+    "branch": "main",
+    "basePath": "research-pm/projects"
+  }
+}
