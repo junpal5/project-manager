@@ -1,5 +1,5 @@
 {
-  "exportedAt": "2026-05-12T10:13:09.443Z",
+  "exportedAt": "2026-05-12T10:14:57.547Z",
   "project": {
     "id": "project_1775452684581_en7lp8",
     "name": "지식재산 보호 실태조사",
@@ -16,10 +16,48 @@
           "최종 설문지 버전명 확정"
         ],
         "instanceId": "questionnaire_1778580787812_xykrbf"
+      },
+      {
+        "id": "pilot_test",
+        "category": "설문/도구",
+        "title": "파일럿 테스트 및 문항 보정",
+        "todos": [
+          "파일럿 표본 및 테스트 시나리오 선정",
+          "응답 소요시간 및 이탈 지점 기록",
+          "이해도 낮은 문항 및 오류 수정",
+          "보정 결과 최종안 반영"
+        ],
+        "instanceId": "pilot_test_1778580790617_xbmewg"
+      },
+      {
+        "id": "project_kickoff",
+        "category": "기획/착수",
+        "title": "프로젝트 킥오프 및 범위 정의",
+        "todos": [
+          "발주 목적 및 기대 산출물 정리",
+          "핵심 이해관계자 및 의사결정 구조 확인",
+          "과업 범위 및 일정 가정 문서화",
+          "리스크 및 선행 의존사항 정리"
+        ],
+        "instanceId": "project_kickoff_1778580818021_rbs93u"
+      },
+      {
+        "id": "project_kickoff",
+        "category": "기획/착수",
+        "title": "프로젝트 킥오프 및 범위 정의",
+        "todos": [
+          "발주 목적 및 기대 산출물 정리",
+          "핵심 이해관계자 및 의사결정 구조 확인",
+          "과업 범위 및 일정 가정 문서화",
+          "리스크 및 선행 의존사항 정리"
+        ],
+        "instanceId": "project_kickoff_1778580896175_inzkfc"
       }
     ],
     "activeStep": "questionnaire_1778580787812_xykrbf",
-    "taskStatus": {},
+    "taskStatus": {
+      "questionnaire_1778580787812_xykrbf-0": false
+    },
     "notes": {},
     "versionName": "v1.0",
     "versionHistory": [
@@ -56,7 +94,7 @@
         }
       }
     ],
-    "lastModified": "2026-05-12T10:13:07.812Z"
+    "lastModified": "2026-05-12T10:14:56.175Z"
   },
   "github": {
     "owner": "junpal5",
