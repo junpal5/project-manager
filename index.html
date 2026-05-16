@@ -218,16 +218,6 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
     <div class="data-grid">
       <div class="stack">
         <div class="section-card glass">
-          <h3>파일 관리</h3>
-          <div class="hero-actions" style="margin-top:4px;justify-content:flex-start">
-            <button class="btn btn-primary" onclick="downloadCurrentProject()">현재 JSON 내려받기</button>
-            <button class="btn btn-secondary" onclick="importProjectJson()">JSON 불러오기</button>
-          </div>
-          <div class="helper" style="margin-top:14px"><strong>안내</strong><p>현재 프로젝트를 JSON으로 내려받거나, 기존 JSON 파일로 프로젝트를 불러올 수 있습니다. 프로젝트 버전 스냅샷 저장은 상단의 <strong>버전 저장</strong> 버튼을 이용하세요.</p></div>
-        </div>
-      </div>
-      <div class="stack">
-        <div class="section-card glass">
           <h3>GitHub 자동 저장 설정</h3>
           <p class="subtle">프로젝트를 수정하면 JSON 파일을 GitHub 저장소에 자동 업로드합니다. 토큰은 브라우저 로컬 저장소에만 저장됩니다.</p>
           <div class="form2" style="margin-top:12px">
@@ -251,6 +241,16 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
           <div class="helper"><strong>자동 저장 방식</strong><p>로컬 저장 후 약간의 지연을 두고 GitHub Contents API로 JSON 파일을 갱신합니다. 저장 배지는 저장 완료 여부를, 동기화 배지는 GitHub 반영 상태를 표시합니다.</p></div>
           <div class="helper" style="margin-top:12px"><strong>권장 경로 예시</strong><p><code>research-pm/projects/복지조사/2026_서울시_청년_생활실태조사.json</code> 형태로 자동 생성됩니다.</p></div>
         </div>
+      </div>
+      <div class="stack">
+        <div class="section-card glass">
+          <h3>파일 관리</h3>
+          <div class="hero-actions" style="margin-top:4px;justify-content:flex-start">
+            <button class="btn btn-primary" onclick="downloadCurrentProject()">현재 JSON 내려받기</button>
+            <button class="btn btn-secondary" onclick="importProjectJson()">JSON 불러오기</button>
+          </div>
+          <div class="helper" style="margin-top:14px"><strong>안내</strong><p>현재 프로젝트를 JSON으로 내려받거나, 기존 JSON 파일로 프로젝트를 불러올 수 있습니다. 프로젝트 버전 스냅샷 저장은 상단의 <strong>버전 저장</strong> 버튼을 이용하세요.</p></div>
+        </div>
         <div class="section-card glass">
           <h3>데이터 관리 비밀번호</h3>
           <p class="subtle">데이터 관리 탭에 들어갈 때 사용하는 비밀번호를 변경할 수 있습니다. 현재 비밀번호를 확인한 뒤 새 비밀번호를 저장합니다.</p>
@@ -271,22 +271,25 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
     <div class="data-grid">
       <div class="stack">
         <div class="section-card glass">
-          <h3>프로젝트 접속 비밀번호</h3>
-          <p class="subtle">참여자가 링크 접속 시 입력하는 비밀번호입니다. 변경하면 GitHub에 자동 저장됩니다.</p>
-          <div class="form2" style="margin-top:12px">
-            <label><span class="label">새 비밀번호</span><input id="projPwdInput" type="password" placeholder="비밀번호 입력"/></label>
-            <label><span class="label">비밀번호 확인</span><input id="projPwdConfirmInput" type="password" placeholder="비밀번호 확인"/></label>
-          </div>
-          <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
-            <button class="btn btn-primary" onclick="saveProjectPassword()">비밀번호 저장</button>
-          </div>
-          <div id="projPwdStatus" style="margin-top:8px;font-size:13px;color:var(--text3)"></div>
-        </div>
-        <div class="section-card glass">
           <h3>참여자 추가</h3>
-          <div class="form3" style="margin-top:12px">
+          <div class="form2" style="margin-top:12px">
             <label><span class="label">이름</span><input id="memberNameInput" type="text" placeholder="홍길동"/></label>
-            <label><span class="label">역할</span><input id="memberRoleInput" type="text" placeholder="조사원"/></label>
+            <label><span class="label">부서</span><input id="memberDeptInput" type="text" placeholder="예: 사회조사 2부문"/></label>
+          </div>
+          <div class="form2" style="margin-top:10px">
+            <label><span class="label">역할</span>
+              <select id="memberRoleInput">
+                <option value="">역할 선택</option>
+                <option value="연구">연구</option>
+                <option value="실사">실사</option>
+                <option value="제작">제작</option>
+                <option value="온라인 조사">온라인 조사</option>
+                <option value="IT 개발">IT 개발</option>
+                <option value="DP">DP</option>
+                <option value="재무회계">재무회계</option>
+                <option value="인사총무">인사총무</option>
+              </select>
+            </label>
             <label><span class="label">이메일 (선택)</span><input id="memberEmailInput" type="text" placeholder="hong@example.com"/></label>
           </div>
           <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
@@ -299,6 +302,30 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
         </div>
       </div>
       <div class="stack">
+        <div class="section-card glass">
+          <h3>프로젝트 접속 비밀번호</h3>
+          <p class="subtle">참여자가 링크 접속 시 입력하는 비밀번호입니다. 변경하면 GitHub에 자동 저장됩니다.</p>
+          <div class="form2" style="margin-top:12px">
+            <label><span class="label">새 비밀번호</span><input id="projPwdInput" type="password" placeholder="비밀번호 입력"/></label>
+            <label><span class="label">비밀번호 확인</span><input id="projPwdConfirmInput" type="password" placeholder="비밀번호 확인"/></label>
+          </div>
+          <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
+            <button class="btn btn-primary" onclick="saveProjectPassword()">비밀번호 저장</button>
+          </div>
+          <div id="projPwdStatus" style="margin-top:8px;font-size:13px;color:var(--text3)"></div>
+        </div>
+        <div class="section-card glass">
+          <h3>참여자 관리 비밀번호</h3>
+          <p class="subtle">참여자 관리 탭에 들어갈 때 사용하는 비밀번호를 변경합니다.</p>
+          <div class="form3" style="margin-top:12px">
+            <label><span class="label">현재 비밀번호</span><input id="currentParticipantPasswordInput" type="password" placeholder="현재 비밀번호"/></label>
+            <label><span class="label">새 비밀번호</span><input id="newParticipantPasswordInput" type="password" placeholder="새 비밀번호"/></label>
+            <label><span class="label">새 비밀번호 확인</span><input id="confirmParticipantPasswordInput" type="password" placeholder="새 비밀번호 확인"/></label>
+          </div>
+          <div class="hero-actions" style="margin-top:12px;justify-content:flex-start">
+            <button class="btn btn-primary" onclick="saveParticipantPasswordSettings()">비밀번호 변경</button>
+          </div>
+        </div>
         <div class="section-card glass">
           <h3>참여자 공유 링크</h3>
           <p class="subtle">아래 링크를 복사하여 참여자에게 전달하세요. 참여자는 비밀번호 입력 후 본인을 선택하면 프로젝트에 접속할 수 있습니다.</p>
@@ -374,6 +401,18 @@ textarea{min-height:110px;resize:vertical;line-height:1.7}
     </div>
   </div>
 </div>
+<div id="participantPasswordModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h3 class="modal-title">참여자 관리 잠금 해제</h3>
+    <p class="modal-copy">참여자 관리 탭에 접근하려면 비밀번호를 입력하세요.</p>
+    <label><span class="label">비밀번호</span><input id="participantPasswordModalInput" type="password" placeholder="비밀번호 입력" /></label>
+    <div id="participantPasswordModalError" class="modal-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" type="button" onclick="closeParticipantPasswordModal()">취소</button>
+      <button class="btn btn-primary" type="button" onclick="submitParticipantPassword()">확인</button>
+    </div>
+  </div>
+</div>
 <div id="dataPasswordModal" class="modal-overlay hidden">
   <div class="modal-card">
     <h3 class="modal-title">데이터 관리 잠금 해제</h3>
@@ -410,8 +449,9 @@ const MASTER_TASKS=[
 const STORAGE_KEY='research_pm_multi_v2'; let saveTimer=null, syncTimer=null, toastTimer=null;
 const todoEditOpen={};
 const DEFAULT_DATA_TAB_PASSWORD='1205';
+const DEFAULT_PARTICIPANT_TAB_PASSWORD='1205';
 let pendingProtectedTab=null;
-const defaultAppState=()=>({currentTab:'workflow',currentProjectId:null,activeCategory:'전체',dataTabUnlocked:false,dataTabPassword:DEFAULT_DATA_TAB_PASSWORD,github:{owner:'',repo:'',branch:'main',basePath:'research-pm/projects',fileNameRule:'project',token:''},projects:[]});
+const defaultAppState=()=>({currentTab:'workflow',currentProjectId:null,activeCategory:'전체',dataTabUnlocked:false,dataTabPassword:DEFAULT_DATA_TAB_PASSWORD,participantTabUnlocked:false,participantTabPassword:DEFAULT_PARTICIPANT_TAB_PASSWORD,github:{owner:'',repo:'',branch:'main',basePath:'research-pm/projects',fileNameRule:'project',token:''},projects:[]});
 const defaultProject=(name='새 조사 프로젝트')=>({id:createId('project'),name,folder:'기본 폴더',passwordHash:'',participants:[],requests:[],selectedTasks:[],activeStep:null,taskStatus:{},notes:{},versionName:'v1.0',versionHistory:[],lastModified:new Date().toISOString()});
 let appState=defaultAppState();
 function createId(prefix){return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`}
@@ -421,7 +461,7 @@ function fmt(v){if(!v)return '-';const d=new Date(v);if(Number.isNaN(d.getTime()
 function slug(v){const s=String(v||'').trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g,' ').replace(/\s+/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'');return s||'project'}
 function project(){return appState.projects.find(p=>p.id===appState.currentProjectId)||null}
 function ensureProject(){if(!appState.projects.length){const p=defaultProject('2026 조사 프로젝트');appState.projects.push(p);appState.currentProjectId=p.id}if(!project())appState.currentProjectId=appState.projects[0].id}
-function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){const raw=JSON.parse(s);appState={...defaultAppState(),...raw,github:{...defaultAppState().github,...(raw.github||{})},projects:Array.isArray(raw.projects)?raw.projects.map(p=>({...defaultProject(p?.name||'불러온 프로젝트'),...p,passwordHash:p.passwordHash||'',participants:Array.isArray(p.participants)?p.participants:[],requests:Array.isArray(p.requests)?p.requests:[],selectedTasks:Array.isArray(p.selectedTasks)?p.selectedTasks:[],taskStatus:p.taskStatus||{},notes:p.notes||{},versionHistory:Array.isArray(p.versionHistory)?p.versionHistory:[]})):[]}}}catch(e){console.warn(e)}appState.currentTab='workflow';appState.dataTabUnlocked=false;ensureProject()}
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){const raw=JSON.parse(s);appState={...defaultAppState(),...raw,github:{...defaultAppState().github,...(raw.github||{})},projects:Array.isArray(raw.projects)?raw.projects.map(p=>({...defaultProject(p?.name||'불러온 프로젝트'),...p,passwordHash:p.passwordHash||'',participants:Array.isArray(p.participants)?p.participants:[],requests:Array.isArray(p.requests)?p.requests:[],selectedTasks:Array.isArray(p.selectedTasks)?p.selectedTasks:[],taskStatus:p.taskStatus||{},notes:p.notes||{},versionHistory:Array.isArray(p.versionHistory)?p.versionHistory:[]})):[]}}}catch(e){console.warn(e)}appState.currentTab='workflow';appState.dataTabUnlocked=false;appState.participantTabUnlocked=false;ensureProject()}
 function hasGithubConfig(){const g=appState.github;return !!(g.owner&&g.repo&&g.branch&&g.token)}
 function setLocalBadge(status,label){const el=document.getElementById('localStatusBadge');el.className=`status-badge status-local-${status}`;el.innerHTML=`<span class="dot"></span><span>${label}</span>`}
 function setSyncBadge(status,label){const el=document.getElementById('syncStatusBadge');el.className=`status-badge status-sync-${status}`;el.innerHTML=`<span class="dot"></span><span>${label}</span>`}
@@ -433,11 +473,17 @@ function overallProgress(p){if(!p.selectedTasks.length)return 0;const total=p.se
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
 function getDataTabPassword(){return appState.dataTabPassword||DEFAULT_DATA_TAB_PASSWORD}
 function applyTab(tab){appState.currentTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.getElementById('workflowPage').classList.toggle('active',tab==='workflow');document.getElementById('dataPage').classList.toggle('active',tab==='data');document.getElementById('participantPage').classList.toggle('active',tab==='participants')}
+function getParticipantTabPassword(){return appState.participantTabPassword||DEFAULT_PARTICIPANT_TAB_PASSWORD}
+function openParticipantPasswordModal(){document.getElementById('participantPasswordModal').classList.remove('hidden');document.getElementById('participantPasswordModalInput').value='';document.getElementById('participantPasswordModalError').textContent='';setTimeout(()=>document.getElementById('participantPasswordModalInput').focus(),0)}
+function closeParticipantPasswordModal(){document.getElementById('participantPasswordModal').classList.add('hidden')}
+function submitParticipantPassword(){const input=document.getElementById('participantPasswordModalInput').value;if(input!==getParticipantTabPassword()){document.getElementById('participantPasswordModalError').textContent='비밀번호가 올바르지 않습니다.';return}appState.participantTabUnlocked=true;saveState('participant_tab_unlock',true,true);closeParticipantPasswordModal();applyTab('participants');renderParticipantPage();toast('참여자 관리 탭 잠금이 해제되었습니다.')}
+function saveParticipantPasswordSettings(){const current=document.getElementById('currentParticipantPasswordInput').value;const next=document.getElementById('newParticipantPasswordInput').value;const confirm=document.getElementById('confirmParticipantPasswordInput').value;if(current!==getParticipantTabPassword()){alert('현재 비밀번호가 올바르지 않습니다.');return}if(!next){alert('새 비밀번호를 입력하세요.');return}if(next!==confirm){alert('새 비밀번호 확인이 일치하지 않습니다.');return}appState.participantTabPassword=next;appState.participantTabUnlocked=true;saveState('participant_password_change');renderParticipantPage();toast('참여자 관리 비밀번호를 변경했습니다.')}
 function openDataPasswordModal(targetTab='data'){pendingProtectedTab=targetTab;document.getElementById('dataPasswordModal').classList.remove('hidden');document.getElementById('dataPasswordModalInput').value='';document.getElementById('dataPasswordModalError').textContent='';setTimeout(()=>document.getElementById('dataPasswordModalInput').focus(),0)}
 function closeDataPasswordModal(){pendingProtectedTab=null;document.getElementById('dataPasswordModal').classList.add('hidden');document.getElementById('dataPasswordModalError').textContent=''}
 function submitDataPassword(){const input=document.getElementById('dataPasswordModalInput').value;if(input!==getDataTabPassword()){document.getElementById('dataPasswordModalError').textContent='비밀번호가 올바르지 않습니다.';return}appState.dataTabUnlocked=true;saveState('data_tab_unlock',true,true);const nextTab=pendingProtectedTab||'data';closeDataPasswordModal();applyTab(nextTab);toast('데이터 관리 탭 잠금이 해제되었습니다.')}
 function setTab(tab){
 if(tab==='data'&&!appState.dataTabUnlocked){openDataPasswordModal(tab);return}
+if(tab==='participants'&&!appState.participantTabUnlocked){openParticipantPasswordModal();return}
 applyTab(tab);if(tab==='participants')renderParticipantPage()}
 function renderSelect(){document.getElementById('projectSelect').innerHTML=appState.projects.map(p=>`<option value="${p.id}" ${p.id===appState.currentProjectId?'selected':''}>${esc((p.folder||'기본 폴더')+' / '+(p.name||'이름 없는 프로젝트'))}</option>`).join('')}
 function renderStats(){const p=project();const total=p.selectedTasks.reduce((n,t)=>n+t.todos.length,0);const done=p.selectedTasks.reduce((n,t)=>n+t.todos.filter((_,i)=>p.taskStatus[`${t.instanceId}-${i}`]).length,0);document.getElementById('overallPctStat').textContent=`${overallProgress(p)}%`;document.getElementById('overallMetaStat').textContent=total?`${done} / ${total} 체크리스트 완료`:'등록된 과업이 없습니다.';document.getElementById('selectedTaskCountStat').textContent=String(p.selectedTasks.length);document.getElementById('completedTodoStat').textContent=String(done);document.getElementById('lastModifiedStat').textContent=fmt(p.lastModified)}
@@ -487,7 +533,7 @@ function openVersionHistoryModal(){const p=project();const el=document.getElemen
 function closeVersionHistoryModal(){document.getElementById('versionHistoryModal').classList.add('hidden')}
 async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 async function saveProjectPassword(){const pw=document.getElementById('projPwdInput').value;const conf=document.getElementById('projPwdConfirmInput').value;if(!pw){toast('비밀번호를 입력하세요.');return}if(pw!==conf){toast('비밀번호가 일치하지 않습니다.');return}const hash=await sha256(pw);project().passwordHash=hash;document.getElementById('projPwdInput').value='';document.getElementById('projPwdConfirmInput').value='';saveState('proj_password');renderParticipantPage();toast('프로젝트 비밀번호를 설정했습니다.')}
-function addParticipant(){const name=document.getElementById('memberNameInput').value.trim();const role=document.getElementById('memberRoleInput').value.trim();const email=document.getElementById('memberEmailInput').value.trim();if(!name){toast('이름을 입력하세요.');return}const p=project();p.participants.push({id:createId('member'),name,role,email,addedAt:new Date().toISOString()});document.getElementById('memberNameInput').value='';document.getElementById('memberRoleInput').value='';document.getElementById('memberEmailInput').value='';saveState('participant_add');renderParticipantPage();renderDetail();toast(`"${name}" 참여자를 추가했습니다.`)}
+function addParticipant(){const name=document.getElementById('memberNameInput').value.trim();const dept=document.getElementById('memberDeptInput').value.trim();const role=document.getElementById('memberRoleInput').value;const email=document.getElementById('memberEmailInput').value.trim();if(!name){toast('이름을 입력하세요.');return}if(!role){toast('역할을 선택하세요.');return}const p=project();p.participants.push({id:createId('member'),name,department:dept,role,email,addedAt:new Date().toISOString()});document.getElementById('memberNameInput').value='';document.getElementById('memberDeptInput').value='';document.getElementById('memberRoleInput').value='';document.getElementById('memberEmailInput').value='';saveState('participant_add');renderParticipantPage();renderDetail();toast(`"${name}" 참여자를 추가했습니다.`)}
 function removeParticipant(id){const p=project();const member=p.participants.find(m=>m.id===id);if(!member||!confirm(`"${member.name}"을(를) 참여자 목록에서 삭제할까요?`))return;p.participants=p.participants.filter(m=>m.id!==id);p.selectedTasks.forEach(t=>{if(t.assignments)Object.keys(t.assignments).forEach(k=>{if(t.assignments[k]===id)delete t.assignments[k]})});saveState('participant_remove');renderParticipantPage();renderDetail();toast('참여자를 삭제했습니다.')}
 function generateShareLink(){const g=appState.github;const p=project();if(!g.owner||!g.repo)return '⚠️ GitHub 설정을 먼저 완료하세요 (데이터 관리 탭).';const folder=slug(p.folder||'기본_폴더');const name=slug(p.name||'project');const base=location.origin+location.pathname.replace(/[^/]*$/,'');return `${base}participant.html?owner=${encodeURIComponent(g.owner)}&repo=${encodeURIComponent(g.repo)}&branch=${encodeURIComponent(g.branch||'main')}&folder=${encodeURIComponent(folder)}&file=${encodeURIComponent(name)}`}
 function copyShareLink(){const link=generateShareLink();if(link.startsWith('⚠️')){toast(link);return}navigator.clipboard.writeText(link).then(()=>toast('링크를 클립보드에 복사했습니다.')).catch(()=>{alert('공유 링크:\n'+link)})}
@@ -501,13 +547,14 @@ function openRequestModal(instanceId,todoIdx){const p=project();const t=p.select
 function closeRequestModal(){pendingRequest=null;document.getElementById('requestModal').classList.add('hidden')}
 function submitRequest(){if(!pendingRequest)return;const{instanceId,todoIdx,toId,member,taskTitle,todoText}=pendingRequest;const msg=document.getElementById('requestModalMsg').value.trim();const p=project();p.requests.push({id:createId('req'),taskInstanceId:instanceId,taskTitle,todoIndex:Number(todoIdx),todoText,message:msg,toParticipantId:toId,toParticipantName:member.name,sentAt:new Date().toISOString()});saveState('request_send');closeRequestModal();renderParticipantPage();toast(`"${member.name}"에게 업무 요청을 발송했습니다.`)}
 function deleteRequest(id){const p=project();if(!confirm('이 업무 요청을 삭제할까요?'))return;p.requests=p.requests.filter(r=>r.id!==id);saveState('request_delete');renderParticipantPage();toast('업무 요청을 삭제했습니다.')}
-function renderParticipantPage(){const p=project();const pwEl=document.getElementById('projPwdStatus');if(pwEl)pwEl.textContent=p.passwordHash?'✓ 비밀번호가 설정되어 있습니다.':'아직 비밀번호가 설정되지 않았습니다.';const el=document.getElementById('participantList');if(el){el.innerHTML=p.participants.length?p.participants.map(m=>`<div class="member-card"><div class="member-avatar">${esc(m.name.slice(0,2))}</div><div><div class="member-name">${esc(m.name)}</div><div class="member-role">${esc(m.role||'역할 없음')}${m.email?` · ${esc(m.email)}`:''}</div></div><button class="btn btn-danger" style="padding:0 10px;min-height:34px;font-size:12px" onclick="removeParticipant('${m.id}')">삭제</button></div>`).join(''):'<div class="empty" style="padding:24px 0">등록된 참여자가 없습니다.</div>'}const linkBox=document.getElementById('shareLinkBox');if(linkBox)linkBox.textContent=generateShareLink();const reqEl=document.getElementById('requestHistoryList');if(reqEl){reqEl.innerHTML=p.requests.length?[...p.requests].reverse().map(r=>`<div class="request-item"><div class="request-header"><div><div class="request-to">→ ${esc(r.toParticipantName)}</div><div style="font-size:13px;color:var(--text2)">${esc(r.taskTitle)} · ${esc(r.todoText)}</div></div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:12px;color:var(--text3)">${fmt(r.sentAt)}</span><button class="btn btn-danger" style="padding:0 8px;min-height:26px;font-size:12px" onclick="deleteRequest('${r.id}')">삭제</button></div></div>${r.message?`<div class="request-msg">${esc(r.message)}</div>`:''}</div>`).join(''):'<div class="empty" style="padding:24px 0">발송된 업무 요청이 없습니다.</div>'}}
-window.toggleTodoEditor=toggleTodoEditor;window.openLibraryDrawer=openLibraryDrawer;window.closeLibraryDrawer=closeLibraryDrawer;window.setCategory=setCategory;window.addTask=addTask;window.removeTask=removeTask;window.selectStep=selectStep;window.toggleTodo=toggleTodo;window.saveNote=saveNote;window.updateTodoText=updateTodoText;window.addTodoItem=addTodoItem;window.removeTodoItem=removeTodoItem;window.moveStep=moveStep;window.moveActiveStep=moveActiveStep;window.createProject=createProject;window.duplicateProject=duplicateProject;window.resetCurrentProject=resetCurrentProject;window.downloadCurrentProject=downloadCurrentProject;window.importProjectJson=importProjectJson;window.saveVersionSnapshot=saveVersionSnapshot;window.restoreVersion=restoreVersion;window.downloadVersion=downloadVersion;window.saveGithubSettings=saveGithubSettings;window.clearGithubSettings=clearGithubSettings;window.saveDataPasswordSettings=saveDataPasswordSettings;window.openDataPasswordModal=openDataPasswordModal;window.closeDataPasswordModal=closeDataPasswordModal;window.submitDataPassword=submitDataPassword;window.syncCurrentProjectToGithub=syncCurrentProjectToGithub;window.setTab=setTab;window.saveProjectPassword=saveProjectPassword;window.addParticipant=addParticipant;window.removeParticipant=removeParticipant;window.copyShareLink=copyShareLink;window.assignTodo=assignTodo;window.assignStep=assignStep;window.openRequestModal=openRequestModal;window.closeRequestModal=closeRequestModal;window.submitRequest=submitRequest;window.deleteRequest=deleteRequest;window.openVersionSuggestModal=openVersionSuggestModal;window.selectSuggestChip=selectSuggestChip;window.closeVersionSuggestModal=closeVersionSuggestModal;window.confirmVersionSave=confirmVersionSave;window.openVersionHistoryModal=openVersionHistoryModal;window.closeVersionHistoryModal=closeVersionHistoryModal;window.openSystemVersionModal=openSystemVersionModal;window.closeSystemVersionModal=closeSystemVersionModal;
+function renderParticipantPage(){const p=project();const pwEl=document.getElementById('projPwdStatus');if(pwEl)pwEl.textContent=p.passwordHash?'✓ 비밀번호가 설정되어 있습니다.':'아직 비밀번호가 설정되지 않았습니다.';const el=document.getElementById('participantList');if(el){el.innerHTML=p.participants.length?p.participants.map(m=>`<div class="member-card"><div class="member-avatar">${esc(m.name.slice(0,2))}</div><div><div class="member-name">${esc(m.name)}</div><div class="member-role">${esc(m.role||'역할 없음')}${m.department?` · ${esc(m.department)}`:''}${m.email?` · ${esc(m.email)}`:''}</div></div><button class="btn btn-danger" style="padding:0 10px;min-height:34px;font-size:12px" onclick="removeParticipant('${m.id}')">삭제</button></div>`).join(''):'<div class="empty" style="padding:24px 0">등록된 참여자가 없습니다.</div>'}const linkBox=document.getElementById('shareLinkBox');if(linkBox)linkBox.textContent=generateShareLink();const reqEl=document.getElementById('requestHistoryList');if(reqEl){reqEl.innerHTML=p.requests.length?[...p.requests].reverse().map(r=>`<div class="request-item"><div class="request-header"><div><div class="request-to">→ ${esc(r.toParticipantName)}</div><div style="font-size:13px;color:var(--text2)">${esc(r.taskTitle)} · ${esc(r.todoText)}</div></div><div style="display:flex;gap:6px;align-items:center"><span style="font-size:12px;color:var(--text3)">${fmt(r.sentAt)}</span><button class="btn btn-danger" style="padding:0 8px;min-height:26px;font-size:12px" onclick="deleteRequest('${r.id}')">삭제</button></div></div>${r.message?`<div class="request-msg">${esc(r.message)}</div>`:''}</div>`).join(''):'<div class="empty" style="padding:24px 0">발송된 업무 요청이 없습니다.</div>'}}
+window.toggleTodoEditor=toggleTodoEditor;window.openLibraryDrawer=openLibraryDrawer;window.closeLibraryDrawer=closeLibraryDrawer;window.setCategory=setCategory;window.addTask=addTask;window.removeTask=removeTask;window.selectStep=selectStep;window.toggleTodo=toggleTodo;window.saveNote=saveNote;window.updateTodoText=updateTodoText;window.addTodoItem=addTodoItem;window.removeTodoItem=removeTodoItem;window.moveStep=moveStep;window.moveActiveStep=moveActiveStep;window.createProject=createProject;window.duplicateProject=duplicateProject;window.resetCurrentProject=resetCurrentProject;window.downloadCurrentProject=downloadCurrentProject;window.importProjectJson=importProjectJson;window.saveVersionSnapshot=saveVersionSnapshot;window.restoreVersion=restoreVersion;window.downloadVersion=downloadVersion;window.saveGithubSettings=saveGithubSettings;window.clearGithubSettings=clearGithubSettings;window.saveDataPasswordSettings=saveDataPasswordSettings;window.openDataPasswordModal=openDataPasswordModal;window.closeDataPasswordModal=closeDataPasswordModal;window.submitDataPassword=submitDataPassword;window.syncCurrentProjectToGithub=syncCurrentProjectToGithub;window.setTab=setTab;window.saveProjectPassword=saveProjectPassword;window.addParticipant=addParticipant;window.removeParticipant=removeParticipant;window.copyShareLink=copyShareLink;window.assignTodo=assignTodo;window.assignStep=assignStep;window.openRequestModal=openRequestModal;window.closeRequestModal=closeRequestModal;window.submitRequest=submitRequest;window.deleteRequest=deleteRequest;window.openVersionSuggestModal=openVersionSuggestModal;window.selectSuggestChip=selectSuggestChip;window.closeVersionSuggestModal=closeVersionSuggestModal;window.confirmVersionSave=confirmVersionSave;window.openVersionHistoryModal=openVersionHistoryModal;window.closeVersionHistoryModal=closeVersionHistoryModal;window.openSystemVersionModal=openSystemVersionModal;window.closeSystemVersionModal=closeSystemVersionModal;window.openParticipantPasswordModal=openParticipantPasswordModal;window.closeParticipantPasswordModal=closeParticipantPasswordModal;window.submitParticipantPassword=submitParticipantPassword;window.saveParticipantPasswordSettings=saveParticipantPasswordSettings;
 loadState();
 document.getElementById('projectSelect').addEventListener('change',e=>{appState.currentProjectId=e.target.value;render();saveState('switch',true)});
 document.getElementById('projectNameInput').addEventListener('input',e=>{const p=project();p.name=e.target.value||'이름 없는 프로젝트';saveState('rename');renderSelect()});
 document.getElementById('projectFolderInput').addEventListener('input',e=>{const p=project();p.folder=e.target.value||'기본 폴더';saveState('folder');renderSelect()});
 document.getElementById('dataPasswordModalInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitDataPassword()});
+document.getElementById('participantPasswordModalInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitParticipantPassword()});
 render();
 </script>
 </body>
