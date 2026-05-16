@@ -13,6 +13,7 @@
 /
 ├── index.html          # 관리자 페이지 (전체 기능)
 ├── participant.html    # 참여자 전용 뷰 (읽기 전용)
+├── version.json        # 시스템 버전 이력 (Claude 수정 시마다 업데이트)
 └── research-pm/projects/{folder}/{name}.json  # 프로젝트 데이터
 ```
 
@@ -26,7 +27,7 @@
     "passwordHash": "sha256_hex",
     "participants": [{"id","name","role","email","addedAt"}],
     "requests": [{"id","taskInstanceId","taskTitle","todoIndex","todoText","message","toParticipantId","toParticipantName","sentAt"}],
-    "selectedTasks": [{"id","category","title","todos":[],"instanceId","assignments":{"todoIdx":"memberId"}}],
+    "selectedTasks": [{"id","category","title","todos":[],"instanceId","stepAssignee":"memberId","assignments":{"todoIdx":"memberId"}}],
     "activeStep": "instanceId",
     "taskStatus": {"instanceId-todoIdx": true},
     "notes": {"instanceId": "text"},
@@ -42,10 +43,11 @@
 - [x] 다중 프로젝트 관리 (로컬스토리지 + GitHub 자동 동기화)
 - [x] 과업 라이브러리 + 워크플로우 단계 관리
 - [x] 체크리스트 완료 처리
-- [x] 버전 히스토리 (자동 변경 요약 + 이름 추천)
-- [x] 버전 배너 (좌측 하단, 클릭 시 히스토리 모달)
+- [x] 프로젝트 버전 히스토리 (자동 변경 요약 + 이름 추천, 헤더 버튼으로 저장)
+- [x] 시스템 버전 배너 (좌측 하단, SYSTEM_VERSION 상수 표시, 클릭 시 변경 이력)
+- [x] 시스템 버전 관리: `version.json` + `SYSTEM_VERSION`/`SYSTEM_CHANGELOG` 상수 (Claude 수정 시 업데이트)
 - [x] 참여자 관리 (추가/삭제, 역할, 이메일)
-- [x] 담당자 지정 (체크리스트 항목별)
+- [x] 담당자 지정 (과업 단계별 stepAssignee + 체크리스트 항목별 assignments)
 - [x] 업무 요청 발송 (모달 → JSON 저장 → GitHub 동기화)
 - [x] 참여자 공유 링크 생성 (SHA-256 비밀번호 보호)
 - [x] participant.html: 내 업무 / 전체 현황 / 알림함 탭, 60초 자동 새로고침
@@ -63,4 +65,7 @@ CSS 변수: `--canvas`, `--surface-soft`, `--ink-deep`, `--ink`, `--primary(#006
 - 참여자가 쓰기 작업(완료 처리 등)을 하려면 별도 PAT 전달 방식 필요
 - `renderDetail()`에서 participants 배열이 있을 때만 담당자 드롭다운 렌더링
 - `removeTodoItem()`은 assignments 인덱스도 함께 재정렬함
-- 버전 저장은 `openVersionSuggestModal()` → `confirmVersionSave()` 흐름으로 처리
+- 프로젝트 버전 저장: 헤더 '버전 저장' 버튼 → `openVersionSuggestModal()` → `confirmVersionSave()`
+- 시스템 버전 변경 시 반드시 `version.json`과 `SYSTEM_VERSION`/`SYSTEM_CHANGELOG` 상수를 함께 업데이트
+- `renderWorkflow()`의 flow-item: flex 레이아웃, 단계 담당자 select는 participants 있을 때만 렌더링
+- `assignStep(instanceId, participantId)`: selectedTask.stepAssignee 필드 업데이트
