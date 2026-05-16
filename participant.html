@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>프로젝트 참여자 뷰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f4f7fb;--panel:rgba(255,255,255,.72);--line:rgba(148,163,184,.32);--line2:rgba(148,163,184,.48);--text:#172033;--text2:#52607a;--text3:#7b879c;--accent:#4f7cff;--accent2:#00bfa5;--success:#22c55e;--warn:#f59e0b;--danger:#ef4444;--shadow:0 24px 60px rgba(15,23,42,.12)}
+*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}
+body{min-height:100vh;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(79,124,255,.12),transparent 24%),radial-gradient(circle at top right,rgba(0,191,165,.10),transparent 26%),linear-gradient(180deg,#fbfcfe 0%,#f4f7fb 100%)}
+button,input,select,textarea{font:inherit}button{border:none;cursor:pointer}
+input,select,textarea{width:100%;color:var(--text);background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:14px;padding:12px 14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:rgba(79,124,255,.6);box-shadow:0 0 0 4px rgba(79,124,255,.10)}
+.shell{width:min(1100px,calc(100% - 32px));margin:18px auto 36px}
+.glass{background:var(--panel);border:1px solid rgba(255,255,255,.72);box-shadow:var(--shadow);backdrop-filter:blur(22px) saturate(125%);-webkit-backdrop-filter:blur(22px) saturate(125%)}
+.hidden{display:none!important}
+.btn{min-height:46px;padding:0 18px;border-radius:14px;font-size:14px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),#7aa3ff)}
+.btn-secondary{color:var(--text);border:1px solid var(--line2);background:rgba(255,255,255,.88)}
+/* loading/error */
+.center-view{text-align:center;padding:80px 20px}
+.center-icon{font-size:56px;margin-bottom:16px}
+.center-title{font-size:20px;font-weight:700;color:var(--text2);margin-bottom:8px}
+.center-sub{font-size:14px;color:var(--text3);line-height:1.7}
+/* auth */
+.auth-card{max-width:420px;margin:60px auto;padding:32px;border-radius:28px}
+.brand{display:flex;gap:16px;align-items:center;margin-bottom:24px}
+.brand-mark{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,124,255,.95),rgba(0,191,165,.78));color:#fff;font-size:20px;font-weight:800;flex-shrink:0}
+.eyebrow{font:12px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2);margin-bottom:4px}
+.auth-card h2{margin:0 0 8px;font-size:22px;font-weight:800}
+.auth-card p{margin:0 0 18px;font-size:14px;color:var(--text2);line-height:1.6}
+.error-msg{min-height:18px;margin-top:8px;font-size:13px;font-weight:700;color:var(--danger)}
+/* name selection */
+.name-card-wrap{max-width:640px;margin:60px auto;padding:32px;border-radius:28px}
+.name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px}
+.name-card{padding:18px 14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.76);cursor:pointer;text-align:center;transition:border-color .15s,background .15s}
+.name-card:hover{border-color:rgba(79,124,255,.5);background:rgba(79,124,255,.05)}
+.name-avatar{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:17px;font-weight:800;margin:0 auto 10px}
+.name-label{font-size:15px;font-weight:700}
+.name-role{font-size:12px;color:var(--text2);margin-top:3px}
+/* dashboard header */
+.dash-header{border-radius:28px;padding:24px;margin-bottom:14px}
+.dash-brand{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+.dash-brand h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.03em}
+.dash-brand p{margin:5px 0 0;font-size:14px;color:var(--text2)}
+.track{height:8px;border-radius:999px;background:rgba(148,163,184,.18);overflow:hidden}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+/* refresh bar */
+.refresh-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-radius:14px;background:rgba(255,255,255,.6);border:1px solid var(--line);margin-bottom:14px;font-size:13px;color:var(--text2);flex-wrap:wrap;gap:8px}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+.stat-card{padding:18px;border-radius:22px}
+.stat-label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase}
+.stat-value{margin-top:8px;font-size:30px;font-weight:800;letter-spacing:-.04em}
+.stat-sub{margin-top:5px;font-size:13px;color:var(--text3)}
+/* tabs */
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tab-btn{padding:9px 14px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.86);font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.tab-btn.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.notif-badge{width:18px;height:18px;border-radius:999px;background:rgba(239,68,68,.9);color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+/* task/progress cards */
+.card{padding:18px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.76);margin-bottom:12px}
+.card-cat{font-size:11px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.card-title{font-size:16px;font-weight:800;margin-bottom:10px}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-pct{font-size:16px;font-weight:800}
+/* todo items */
+.todo-row{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;margin-bottom:4px}
+.todo-row.mine{background:rgba(79,124,255,.06);border:1px solid rgba(79,124,255,.15)}
+.todo-row.done-row{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15)}
+.chk{width:20px;height:20px;flex:0 0 20px;border-radius:6px;border:2px solid rgba(148,163,184,.5);display:grid;place-items:center;font-size:11px;color:transparent;margin-top:1px}
+.todo-row.done-row .chk{color:#fff;border-color:var(--success);background:var(--success)}
+.todo-txt{font-size:14px;font-weight:600;line-height:1.5;flex:1}
+.todo-row.done-row .todo-txt{color:var(--text2);text-decoration:line-through}
+.assign-tag{padding:3px 8px;border-radius:999px;background:rgba(79,124,255,.1);color:var(--accent);font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:3px}
+/* notifications */
+.notif-card{padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.76);margin-bottom:10px}
+.notif-card.unread{border-color:rgba(79,124,255,.3);background:rgba(79,124,255,.04)}
+.notif-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px}
+.notif-task{font-size:13px;font-weight:700;color:var(--accent2)}
+.notif-date{font-size:12px;color:var(--text3);white-space:nowrap}
+.notif-todo{font-size:13px;color:var(--text2);margin-bottom:6px}
+.notif-msg{font-size:14px;font-weight:600;color:var(--text);line-height:1.6;padding:8px 12px;border-radius:10px;background:rgba(148,163,184,.08);border-left:3px solid var(--accent)}
+.new-tag{display:inline-block;padding:1px 7px;border-radius:999px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;margin-left:6px;vertical-align:middle}
+/* group header */
+.group-label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin:18px 0 10px}
+.empty{padding:40px 20px;text-align:center;color:var(--text3);font-size:15px;line-height:1.7}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.shell{width:calc(100%-16px)}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="loadingView" class="center-view">
+    <div class="center-icon">⏳</div>
+    <div class="center-title">프로젝트 데이터를 불러오는 중...</div>
+  </div>
+  <div id="errorView" class="hidden center-view">
+    <div class="center-icon">⚠️</div>
+    <div id="errorMsg" class="center-title" style="color:var(--danger)"></div>
+    <div class="center-sub">URL이 올바른지 확인하거나 관리자에게 문의하세요.</div>
+  </div>
+  <div id="authView" class="hidden">
+    <div class="auth-card glass">
+      <div class="brand">
+        <div class="brand-mark">PM</div>
+        <div><div class="eyebrow">Project Manager</div><div id="authProjectName" style="font-size:18px;font-weight:800"></div></div>
+      </div>
+      <h2>프로젝트 접속</h2>
+      <p>관리자에게 전달받은 비밀번호를 입력하세요.</p>
+      <input type="password" id="pwInput" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')submitAuth()"/>
+      <div id="authError" class="error-msg"></div>
+      <div style="margin-top:14px"><button class="btn btn-primary" style="width:100%" onclick="submitAuth()">접속하기</button></div>
+    </div>
+  </div>
+  <div id="nameView" class="hidden">
+    <div class="name-card-wrap glass">
+      <h2 style="margin:0 0 6px;font-size:22px;font-weight:800">본인 선택</h2>
+      <p style="margin:0;font-size:14px;color:var(--text2)">참여자 목록에서 본인을 선택하세요.</p>
+      <div id="nameList" class="name-grid"></div>
+    </div>
+  </div>
+  <div id="dashboard" class="hidden">
+    <header id="dashHeader" class="dash-header glass"></header>
+    <div class="refresh-bar">
+      <span id="lastRefreshedText" style="color:var(--text3)">마지막 새로고침: -</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span id="participantTag" style="padding:6px 12px;border-radius:999px;background:rgba(79,124,255,.1);color:var(--accent);font-size:13px;font-weight:700"></span>
+        <button class="btn btn-secondary" style="min-height:34px;padding:0 12px;font-size:13px" onclick="refreshData()">새로고침</button>
+        <button class="btn btn-secondary" style="min-height:34px;padding:0 12px;font-size:13px" onclick="changeParticipant()">이름 변경</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat-card glass"><div class="stat-label">전체 진행률</div><div id="dOverallPct" class="stat-value">0%</div><div id="dOverallSub" class="stat-sub"></div></div>
+      <div class="stat-card glass"><div class="stat-label">내 배정 업무</div><div id="dMyCount" class="stat-value">0</div><div class="stat-sub">배정된 체크리스트</div></div>
+      <div class="stat-card glass"><div class="stat-label">미확인 알림</div><div id="dUnreadCount" class="stat-value">0</div><div class="stat-sub">새 업무 요청</div></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="mytasks" onclick="setDashTab('mytasks')">내 업무</button>
+      <button class="tab-btn" data-tab="overview" onclick="setDashTab('overview')">전체 현황</button>
+      <button class="tab-btn" data-tab="notifications" onclick="setDashTab('notifications')">알림함 <span id="notifBadge" class="notif-badge hidden">0</span></button>
+    </div>
+    <div id="mytasksPanel"></div>
+    <div id="overviewPanel" class="hidden"></div>
+    <div id="notificationsPanel" class="hidden"></div>
+  </div>
+</div>
+<script>
+function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function fmt(v){if(!v)return '-';const d=new Date(v);if(isNaN(d.getTime()))return '-';return new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
+async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+
+let projectData=null,currentParticipantId=null,urlParams={},refreshTimer=null;
+
+function sessionKey(suffix){return `pm_${urlParams.folder}_${urlParams.file}_${suffix}`}
+function getReadIds(){try{return JSON.parse(sessionStorage.getItem(sessionKey('read'))||'[]')}catch{return []}}
+function markRead(ids){sessionStorage.setItem(sessionKey('read'),JSON.stringify([...new Set([...getReadIds(),...ids])]))}
+
+function show(id){['loadingView','errorView','authView','nameView','dashboard'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id))}
+function showError(msg){document.getElementById('errorMsg').textContent=msg;show('errorView')}
+
+function parseParams(){const p=new URLSearchParams(location.search);return{owner:p.get('owner')||'',repo:p.get('repo')||'',branch:p.get('branch')||'main',folder:p.get('folder')||'',file:p.get('file')||''}}
+
+async function fetchProject(){
+  const{owner,repo,branch,folder,file}=urlParams;
+  if(!owner||!repo||!folder||!file){showError('링크가 올바르지 않습니다. (필수 파라미터 누락)');return null}
+  const url=`https://raw.githubusercontent.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/research-pm/projects/${encodeURIComponent(folder)}/${encodeURIComponent(file)}.json?v=${Date.now()}`;
+  try{
+    const res=await fetch(url);
+    if(!res.ok){showError(`데이터를 불러올 수 없습니다. (HTTP ${res.status})`);return null}
+    const json=await res.json();
+    return json.project||json;
+  }catch(e){showError(`데이터 로드 실패: ${e.message}`);return null}
+}
+
+async function submitAuth(){
+  const pw=document.getElementById('pwInput').value;
+  if(!pw){document.getElementById('authError').textContent='비밀번호를 입력하세요.';return}
+  const hash=await sha256(pw);
+  if(hash!==projectData.passwordHash){document.getElementById('authError').textContent='비밀번호가 올바르지 않습니다.';return}
+  sessionStorage.setItem(sessionKey('auth'),'1');
+  showNameSelection();
+}
+
+function isAuthenticated(){return !projectData.passwordHash||sessionStorage.getItem(sessionKey('auth'))==='1'}
+
+function showNameSelection(){
+  const participants=projectData.participants||[];
+  if(!participants.length){currentParticipantId='__all__';showDashboard();return}
+  const stored=sessionStorage.getItem(sessionKey('participant'));
+  if(stored&&participants.find(m=>m.id===stored)){currentParticipantId=stored;showDashboard();return}
+  document.getElementById('nameList').innerHTML=participants.map(m=>`<div class="name-card" onclick="selectParticipant('${m.id}')"><div class="name-avatar">${esc(m.name.slice(0,2))}</div><div class="name-label">${esc(m.name)}</div><div class="name-role">${esc(m.role||'')}</div></div>`).join('');
+  show('nameView');
+}
+
+function selectParticipant(id){currentParticipantId=id;sessionStorage.setItem(sessionKey('participant'),id);showDashboard()}
+function changeParticipant(){sessionStorage.removeItem(sessionKey('participant'));showNameSelection()}
+
+function getCurrentMember(){return(projectData.participants||[]).find(m=>m.id===currentParticipantId)}
+
+function overallPct(p){
+  if(!p.selectedTasks||!p.selectedTasks.length)return 0;
+  const total=p.selectedTasks.reduce((s,t)=>s+t.todos.length,0);
+  const done=p.selectedTasks.reduce((s,t)=>s+t.todos.filter((_,i)=>p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]).length,0);
+  return total?Math.round(done/total*100):0;
+}
+
+function getMyTodos(p){
+  const out=[];
+  (p.selectedTasks||[]).forEach(t=>{
+    t.todos.forEach((text,i)=>{
+      if(t.assignments&&t.assignments[i]===currentParticipantId){
+        out.push({task:t,idx:i,text,done:!!(p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`])});
+      }
+    });
+  });
+  return out;
+}
+
+function getMyRequests(p){return(p.requests||[]).filter(r=>r.toParticipantId===currentParticipantId).sort((a,b)=>new Date(b.sentAt)-new Date(a.sentAt))}
+
+function showDashboard(){show('dashboard');renderDashboard();startRefreshTimer()}
+
+function renderDashboard(){
+  const p=projectData;
+  const member=getCurrentMember();
+  const pct=overallPct(p);
+  const myTodos=currentParticipantId==='__all__'?[]:getMyTodos(p);
+  const myReqs=currentParticipantId==='__all__'?[]:getMyRequests(p);
+  const readIds=getReadIds();
+  const unread=myReqs.filter(r=>!readIds.includes(r.id));
+
+  document.getElementById('dashHeader').innerHTML=`<div class="dash-brand"><div class="brand-mark">PM</div><div><div class="eyebrow">Project Manager</div><h1>${esc(p.name||'프로젝트')}</h1><p>${esc(p.folder||'')}</p></div></div><div class="track"><div class="fill" style="width:${pct}%"></div></div><div style="margin-top:6px;font-size:13px;color:var(--text2)">전체 진행률 ${pct}%</div>`;
+
+  const totalTodos=p.selectedTasks?p.selectedTasks.reduce((s,t)=>s+t.todos.length,0):0;
+  const doneTodos=p.selectedTasks?p.selectedTasks.reduce((s,t)=>s+t.todos.filter((_,i)=>p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]).length,0):0;
+  document.getElementById('dOverallPct').textContent=`${pct}%`;
+  document.getElementById('dOverallSub').textContent=`${doneTodos} / ${totalTodos} 완료`;
+  document.getElementById('dMyCount').textContent=String(myTodos.length);
+  document.getElementById('dUnreadCount').textContent=String(unread.length);
+  document.getElementById('participantTag').textContent=member?`${member.name}${member.role?` (${member.role})`:''}`:'전체 보기';
+
+  const badge=document.getElementById('notifBadge');
+  if(unread.length){badge.textContent=String(unread.length);badge.classList.remove('hidden')}else{badge.classList.add('hidden')}
+
+  renderMyTasks(myTodos,p);
+  renderOverview(p);
+  renderNotifications(myReqs,readIds);
+  document.getElementById('lastRefreshedText').textContent=`마지막 새로고침: ${fmt(new Date().toISOString())}`;
+}
+
+function renderMyTasks(myTodos,p){
+  const el=document.getElementById('mytasksPanel');
+  if(!myTodos.length){
+    if(currentParticipantId==='__all__'){el.innerHTML='<div class="empty">참여자가 등록되지 않았습니다.<br/>관리자 페이지에서 참여자를 추가하세요.</div>'}
+    else{el.innerHTML='<div class="empty">배정된 업무가 없습니다.<br/>관리자가 업무를 배정하면 여기에 표시됩니다.</div>'}
+    return;
+  }
+  const byTask={};
+  myTodos.forEach(item=>{const k=item.task.instanceId;if(!byTask[k])byTask[k]={task:item.task,items:[]};byTask[k].items.push(item)});
+  el.innerHTML=Object.values(byTask).map(({task,items})=>{
+    const done=items.filter(i=>i.done).length;
+    const pct=Math.round(done/items.length*100);
+    return `<div class="card"><div class="card-cat">${esc(task.category)}</div><div class="card-title">${esc(task.title)}</div><div class="prog-row"><span style="font-size:13px;color:var(--text2)">${done}/${items.length} 완료</span><span class="prog-pct">${pct}%</span></div><div class="track" style="margin-bottom:12px"><div class="fill" style="width:${pct}%"></div></div>${items.map(item=>`<div class="todo-row mine ${item.done?'done-row':''}"><div class="chk">${item.done?'✓':''}</div><div class="todo-txt">${esc(item.text)}</div></div>`).join('')}</div>`;
+  }).join('');
+}
+
+function renderOverview(p){
+  const el=document.getElementById('overviewPanel');
+  const tasks=p.selectedTasks||[];
+  if(!tasks.length){el.innerHTML='<div class="empty">등록된 과업이 없습니다.</div>';return}
+  const cats={};
+  tasks.forEach(t=>{if(!cats[t.category])cats[t.category]=[];cats[t.category].push(t)});
+  el.innerHTML=Object.entries(cats).map(([cat,list])=>`<div class="group-label">${esc(cat)}</div>${list.map(t=>{
+    const done=t.todos.filter((_,i)=>p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]).length;
+    const pct=t.todos.length?Math.round(done/t.todos.length*100):0;
+    return `<div class="card"><div class="prog-row"><div><div class="card-cat">${esc(t.category)}</div><div class="card-title" style="margin-bottom:0">${esc(t.title)}</div></div><span class="prog-pct">${pct}%</span></div><div class="track" style="margin:10px 0 12px"><div class="fill" style="width:${pct}%"></div></div>${t.todos.map((todo,i)=>{
+      const checked=!!(p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]);
+      const assignedId=t.assignments&&t.assignments[i];
+      const assignedMember=(p.participants||[]).find(m=>m.id===assignedId);
+      const isMe=assignedId===currentParticipantId;
+      return `<div class="todo-row ${checked?'done-row':''} ${isMe?'mine':''}"><div class="chk">${checked?'✓':''}</div><div class="todo-txt">${esc(todo)}</div>${assignedMember?`<span class="assign-tag">${esc(assignedMember.name)}</span>`:''}</div>`;
+    }).join('')}</div>`;
+  }).join('')}`).join('');
+}
+
+function renderNotifications(myReqs,readIds){
+  const el=document.getElementById('notificationsPanel');
+  if(!myReqs.length){el.innerHTML='<div class="empty">받은 업무 요청이 없습니다.</div>';return}
+  const unreadIds=myReqs.filter(r=>!readIds.includes(r.id)).map(r=>r.id);
+  el.innerHTML=myReqs.map(r=>{
+    const isNew=!readIds.includes(r.id);
+    return `<div class="notif-card ${isNew?'unread':''}"><div class="notif-top"><div><span class="notif-task">${esc(r.taskTitle)}</span>${isNew?'<span class="new-tag">NEW</span>':''}</div><span class="notif-date">${fmt(r.sentAt)}</span></div><div class="notif-todo">체크리스트: ${esc(r.todoText)}</div>${r.message?`<div class="notif-msg">${esc(r.message)}</div>`:''}</div>`;
+  }).join('');
+  if(unreadIds.length)markRead(unreadIds);
+}
+
+function setDashTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.getElementById('mytasksPanel').classList.toggle('hidden',tab!=='mytasks');
+  document.getElementById('overviewPanel').classList.toggle('hidden',tab!=='overview');
+  document.getElementById('notificationsPanel').classList.toggle('hidden',tab!=='notifications');
+  if(tab==='notifications'){
+    const myReqs=getMyRequests(projectData);
+    const readIds=getReadIds();
+    renderNotifications(myReqs,readIds);
+    document.getElementById('notifBadge').classList.add('hidden');
+    document.getElementById('dUnreadCount').textContent='0';
+  }
+}
+
+async function refreshData(){
+  const newData=await fetchProject();
+  if(newData){projectData=newData;renderDashboard()}
+}
+
+function startRefreshTimer(){
+  if(refreshTimer)clearInterval(refreshTimer);
+  refreshTimer=setInterval(refreshData,60000);
+}
+
+async function init(){
+  urlParams=parseParams();
+  show('loadingView');
+  const data=await fetchProject();
+  if(!data)return;
+  projectData=data;
+  document.title=`${data.name||'프로젝트'} – 참여자 뷰`;
+  if(!isAuthenticated()){
+    document.getElementById('authProjectName').textContent=data.name||'';
+    show('authView');
+    setTimeout(()=>document.getElementById('pwInput').focus(),100);
+  }else{showNameSelection()}
+}
+
+window.submitAuth=submitAuth;window.selectParticipant=selectParticipant;window.changeParticipant=changeParticipant;window.setDashTab=setDashTab;window.refreshData=refreshData;
+init();
+</script>
+</body>
+</html>
