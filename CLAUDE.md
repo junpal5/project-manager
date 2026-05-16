@@ -1,5 +1,13 @@
 # Project Manager — CLAUDE.md
 
+## ⚠️ 코드 수정 시 필수 규칙
+**모든 코드 변경(기능 추가·수정·버그픽스) 후 반드시 아래 3곳을 동시 업데이트할 것:**
+1. `version.json` — version/label/date/changes 갱신
+2. `index.html` 내 `SYSTEM_VERSION` 상수 — 버전 문자열 변경
+3. `index.html` 내 `SYSTEM_CHANGELOG` 배열 — 최신 항목을 맨 앞에 추가
+
+**버전 네이밍 기준:** 패치(버그픽스) → x.x.+1 / 마이너(신규 기능) → x.+1.0 / 메이저(구조 변경) → +1.0.0
+
 ## 프로젝트 개요
 회사 내부용 조사 프로젝트 관리 시스템. 순수 정적 파일(HTML/JS/CSS)로 구성되며 GitHub를 데이터베이스로 사용.
 
