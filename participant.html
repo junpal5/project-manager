@@ -5,7 +5,8 @@
 <title>프로젝트 참여자 뷰</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
 <style>
 :root{--canvas:#ffffff;--surface-soft:#f0f2f5;--hairline:rgba(10,19,23,.14);--hairline-soft:rgba(10,19,23,.07);--ink-deep:#0a1317;--ink:#444950;--charcoal:#65676b;--slate:#8a8d91;--steel:#b0b3b8;--primary:#0064e0;--primary-deep:#0143b5;--primary-soft:rgba(0,100,224,.08);--ink-button:#0a1317;--success:#23a354;--danger:#d92027;}
 *,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}
@@ -60,7 +61,7 @@ input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)
 .todo-row{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;margin-bottom:4px}
 .todo-row.mine{background:var(--primary-soft);border:1px solid rgba(0,100,224,.15)}
 .todo-row.done-row{background:rgba(35,163,84,.05);border:1px solid rgba(35,163,84,.15)}
-.chk{width:18px;height:18px;flex:0 0 18px;border-radius:5px;border:1.5px solid var(--hairline);display:grid;place-items:center;font-size:11px;color:transparent;margin-top:1px}
+.chk{width:18px;height:18px;flex:0 0 18px;border-radius:50%;border:1.5px dashed var(--stone,#c9cbcd);display:grid;place-items:center;font-size:11px;color:transparent;margin-top:2px}
 .todo-row.done-row .chk{color:var(--canvas);border-color:var(--success);background:var(--success)}
 .todo-txt{font-size:14px;font-weight:600;line-height:1.5;flex:1;letter-spacing:-.01em}
 .todo-row.done-row .todo-txt{color:var(--slate);text-decoration:line-through}
@@ -77,7 +78,17 @@ input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)
 .progress-card{padding:16px;border-radius:16px;border:1px solid var(--hairline-soft);background:var(--canvas);margin-bottom:10px}
 .prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .empty{padding:40px 20px;text-align:center;color:var(--slate);font-size:14px;line-height:1.7}
-@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.refresh-bar{border-radius:16px}}
+.info-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.info-item{padding:12px 14px;border-radius:14px;background:var(--surface-soft)}
+.info-label{font-size:11px;font-weight:700;color:var(--charcoal);letter-spacing:.04em}
+.info-value{margin-top:4px;font-size:15px;font-weight:800;line-height:1.4;word-break:keep-all}
+.info-sub{margin-top:2px;font-size:12px;color:var(--charcoal)}
+.late{color:var(--danger)!important}.soon{color:#b87700!important}
+.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;background:var(--surface-soft);color:var(--charcoal);font-size:11px;font-weight:700;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.chip-current{background:var(--ink-button);color:var(--canvas)}
+.chip-late{background:rgba(217,32,39,.1);color:var(--danger)}
+.readonly-note{font-size:12px;color:var(--charcoal);margin:-4px 2px 12px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.refresh-bar{border-radius:16px}.info-row{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.stats{grid-template-columns:1fr}}
 </style>
 </head>
@@ -123,8 +134,8 @@ input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)
       </div>
     </div>
     <div class="stats">
-      <div class="stat-card glass"><div class="stat-label">전체 진행률</div><div id="dOverallPct" class="stat-value">0%</div><div id="dOverallSub" class="stat-sub"></div></div>
-      <div class="stat-card glass"><div class="stat-label">내 배정 업무</div><div id="dMyCount" class="stat-value">0</div><div class="stat-sub">배정된 체크리스트</div></div>
+      <div class="stat-card glass"><div class="stat-label">내 업무 진행률</div><div id="dOverallPct" class="stat-value">0%</div><div id="dOverallSub" class="stat-sub"></div></div>
+      <div class="stat-card glass"><div class="stat-label">내 배정 업무</div><div id="dMyCount" class="stat-value">0</div><div class="stat-sub">남은 할 일 (단계 담당 포함)</div></div>
       <div class="stat-card glass"><div class="stat-label">미확인 알림</div><div id="dUnreadCount" class="stat-value">0</div><div class="stat-sub">새 업무 요청</div></div>
     </div>
     <div class="tabs">
@@ -132,6 +143,7 @@ input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)
       <button class="tab-btn" data-tab="overview" onclick="setDashTab('overview')">전체 현황</button>
       <button class="tab-btn" data-tab="notifications" onclick="setDashTab('notifications')">알림함 <span id="notifBadge" class="notif-badge hidden">0</span></button>
     </div>
+    <p class="readonly-note">읽기 전용 화면입니다. ✓ 표시는 관리자가 완료 처리한 항목이며, 완료 처리가 필요하면 PM에게 알려주세요.</p>
     <div id="mytasksPanel"></div>
     <div id="overviewPanel" class="hidden"></div>
     <div id="notificationsPanel" class="hidden"></div>
@@ -142,6 +154,11 @@ function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function fmt(v){if(!v)return '-';const d=new Date(v);if(isNaN(d.getTime()))return '-';return new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d)}
 async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 
+function parseDate(v){if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v))return null;const [y,m,d]=v.split('-').map(Number);return new Date(y,m-1,d)}
+function daysLeft(v){const d=parseDate(v);if(!d)return null;const t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/86400000)}
+function shortDate(v){const d=parseDate(v);return d?`${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`:''}
+function dday(n){return n===0?'D-day':n>0?`D-${n}`:`D+${-n}`}
+function stepChips(p,t,done){const n=daysLeft(t.dueDate);return `${p.currentStep===t.instanceId?'<span class="chip chip-current">진행 중</span>':''}${t.dueDate?`<span class="chip${!done&&n!==null&&n<0?' chip-late':''}">예정 ${shortDate(t.dueDate)}</span>`:''}`}
 let projectData=null,currentParticipantId=null,urlParams={},refreshTimer=null;
 
 function sessionKey(suffix){return `pm_${urlParams.folder}_${urlParams.file}_${suffix}`}
@@ -201,8 +218,9 @@ function getMyTodos(p){
   const out=[];
   (p.selectedTasks||[]).forEach(t=>{
     t.todos.forEach((text,i)=>{
-      if(t.assignments&&t.assignments[i]===currentParticipantId){
-        out.push({task:t,idx:i,text,done:!!(p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`])});
+      const own=t.assignments&&t.assignments[i];
+      if(own===currentParticipantId||(!own&&t.stepAssignee===currentParticipantId)){
+        out.push({task:t,idx:i,text,viaStep:own!==currentParticipantId,done:!!(p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`])});
       }
     });
   });
@@ -222,13 +240,14 @@ function renderDashboard(){
   const readIds=getReadIds();
   const unread=myReqs.filter(r=>!readIds.includes(r.id));
 
-  document.getElementById('dashHeader').innerHTML=`<div class="dash-brand"><div class="brand-mark">PM</div><div><div class="eyebrow">Project Manager</div><h1>${esc(p.name||'프로젝트')}</h1><p>${esc(p.folder||'')}</p></div></div><div class="track"><div class="fill" style="width:${pct}%"></div></div><div style="margin-top:6px;font-size:13px;color:var(--text2)">전체 진행률 ${pct}%</div>`;
+  const tasks=p.selectedTasks||[];const ci=tasks.findIndex(t=>t.instanceId===p.currentStep);const cur=ci>=0?tasks[ci]:null;const dl=daysLeft(p.dueDate);const done=p.status==='완료';
+  const curDl=cur?daysLeft(cur.dueDate):null;
+  document.getElementById('dashHeader').innerHTML=`<div class="dash-brand"><div class="brand-mark">PM</div><div><div class="eyebrow">Project Manager</div><h1>${esc(p.name||'프로젝트')}</h1><p>${esc([p.client,p.pm?`PM ${p.pm}`:'',p.folder].filter(Boolean).join(' · '))}</p></div></div><div class="info-row"><div class="info-item"><div class="info-label">현재 단계</div><div class="info-value">${cur?`${ci+1}/${tasks.length} ${esc(cur.title)}`:'<span style="color:var(--slate)">미지정</span>'}</div>${cur&&cur.dueDate?`<div class="info-sub ${curDl<0?'late':''}">예정 ${shortDate(cur.dueDate)}</div>`:''}</div><div class="info-item"><div class="info-label">납품일</div><div class="info-value ${!done&&dl!==null?(dl<0?'late':dl<=7?'soon':''):''}">${dl===null?'-':done?'완료':dday(dl)}</div>${p.dueDate?`<div class="info-sub">${esc(p.dueDate)}</div>`:''}</div><div class="info-item"><div class="info-label">상태</div><div class="info-value">${esc(p.status||'-')}</div></div><div class="info-item"><div class="info-label">전체 진행률</div><div class="info-value">${pct}%</div><div class="track" style="margin-top:6px;background:var(--canvas)"><div class="fill" style="width:${pct}%"></div></div></div></div>`;
 
-  const totalTodos=p.selectedTasks?p.selectedTasks.reduce((s,t)=>s+t.todos.length,0):0;
-  const doneTodos=p.selectedTasks?p.selectedTasks.reduce((s,t)=>s+t.todos.filter((_,i)=>p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]).length,0):0;
-  document.getElementById('dOverallPct').textContent=`${pct}%`;
-  document.getElementById('dOverallSub').textContent=`${doneTodos} / ${totalTodos} 완료`;
-  document.getElementById('dMyCount').textContent=String(myTodos.length);
+  const myDone=myTodos.filter(i=>i.done).length;
+  document.getElementById('dOverallPct').textContent=myTodos.length?`${Math.round(myDone/myTodos.length*100)}%`:'-';
+  document.getElementById('dOverallSub').textContent=myTodos.length?`${myDone} / ${myTodos.length} 완료`:'배정된 업무 없음';
+  document.getElementById('dMyCount').textContent=String(myTodos.filter(i=>!i.done).length);
   document.getElementById('dUnreadCount').textContent=String(unread.length);
   document.getElementById('participantTag').textContent=member?`${member.name}${member.role?` (${member.role})`:''}`:'전체 보기';
 
@@ -253,7 +272,7 @@ function renderMyTasks(myTodos,p){
   el.innerHTML=Object.values(byTask).map(({task,items})=>{
     const done=items.filter(i=>i.done).length;
     const pct=Math.round(done/items.length*100);
-    return `<div class="card"><div class="card-cat">${esc(task.category)}</div><div class="card-title">${esc(task.title)}</div><div class="prog-row"><span style="font-size:13px;color:var(--text2)">${done}/${items.length} 완료</span><span class="prog-pct">${pct}%</span></div><div class="track" style="margin-bottom:12px"><div class="fill" style="width:${pct}%"></div></div>${items.map(item=>`<div class="todo-row mine ${item.done?'done-row':''}"><div class="chk">${item.done?'✓':''}</div><div class="todo-txt">${esc(item.text)}</div></div>`).join('')}</div>`;
+    return `<div class="card"><div class="card-cat">${esc(task.category)}</div><div class="card-title">${esc(task.title)}${stepChips(p,task,pct===100)}</div><div class="prog-row"><span style="font-size:13px;color:var(--text2)">${done}/${items.length} 완료</span><span class="prog-pct">${pct}%</span></div><div class="track" style="margin-bottom:12px"><div class="fill" style="width:${pct}%"></div></div>${items.map(item=>`<div class="todo-row mine ${item.done?'done-row':''}"><div class="chk">${item.done?'✓':''}</div><div class="todo-txt">${esc(item.text)}</div>${item.viaStep?'<span class="assign-tag">단계 담당</span>':''}</div>`).join('')}</div>`;
   }).join('');
 }
 
@@ -266,9 +285,9 @@ function renderOverview(p){
   el.innerHTML=Object.entries(cats).map(([cat,list])=>`<div class="group-label">${esc(cat)}</div>${list.map(t=>{
     const done=t.todos.filter((_,i)=>p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]).length;
     const pct=t.todos.length?Math.round(done/t.todos.length*100):0;
-    return `<div class="card"><div class="prog-row"><div><div class="card-cat">${esc(t.category)}</div><div class="card-title" style="margin-bottom:0">${esc(t.title)}</div></div><span class="prog-pct">${pct}%</span></div><div class="track" style="margin:10px 0 12px"><div class="fill" style="width:${pct}%"></div></div>${t.todos.map((todo,i)=>{
+    return `<div class="card"><div class="prog-row"><div><div class="card-title" style="margin-bottom:0">${esc(t.title)}${stepChips(p,t,pct===100)}</div></div><span class="prog-pct">${pct}%</span></div><div class="track" style="margin:10px 0 12px"><div class="fill" style="width:${pct}%"></div></div>${t.todos.map((todo,i)=>{
       const checked=!!(p.taskStatus&&p.taskStatus[`${t.instanceId}-${i}`]);
-      const assignedId=t.assignments&&t.assignments[i];
+      const assignedId=(t.assignments&&t.assignments[i])||t.stepAssignee;
       const assignedMember=(p.participants||[]).find(m=>m.id===assignedId);
       const isMe=assignedId===currentParticipantId;
       return `<div class="todo-row ${checked?'done-row':''} ${isMe?'mine':''}"><div class="chk">${checked?'✓':''}</div><div class="todo-txt">${esc(todo)}</div>${assignedMember?`<span class="assign-tag">${esc(assignedMember.name)}</span>`:''}</div>`;
