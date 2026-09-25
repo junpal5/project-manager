@@ -22,8 +22,13 @@
 /
 ├── index.html          # 관리자 페이지 (전체 기능)
 ├── participant.html    # 참여자 전용 뷰 (읽기 전용)
+├── dashboard.html      # 팀 대시보드 (읽기 전용, _dashboard.json 표시)
+├── dashboard-view.js   # 대시보드 공용 렌더러 (PMDash.summarize / PMDash.render) — index.html·dashboard.html 공유
+├── dashboard-view.css  # 대시보드 공용 스타일
 ├── version.json        # 시스템 버전 이력 (Claude 수정 시마다 업데이트)
-└── research-pm/projects/{folder}/{name}.json
+└── research-pm/projects/
+    ├── _dashboard.json     # 팀 대시보드 요약 (프로젝트 저장 시 자동 갱신, 민감정보 제외)
+    └── {folder}/{name}.json
 ```
 
 ## 데이터 스키마 (project JSON)
@@ -32,13 +37,17 @@
   "project": {
     "id": "project_...", "name": "...", "folder": "...",
     "passwordHash": "sha256_hex",
+    "client": "발주처", "pm": "PM 이름", "startDate": "YYYY-MM-DD", "dueDate": "YYYY-MM-DD(납품일)",
+    "status": "준비|진행|보류|완료",
+    "currentStep": "instanceId (실제 진행 중인 단계 — activeStep과 별개)",
+    "syncedPath": "마지막으로 GitHub에 저장한 경로 (이름 변경 시 이전 파일 삭제용)",
     "participants": [{"id","name","role","email","addedAt"}],
     "requests": [{"id","taskInstanceId","taskTitle","todoIndex","todoText",
                   "message","toParticipantId","toParticipantName","sentAt"}],
     "selectedTasks": [{"id","category","title","todos":[],
-                       "instanceId","stepAssignee":"memberId",
+                       "instanceId","stepAssignee":"memberId","dueDate":"YYYY-MM-DD",
                        "assignments":{"todoIdx":"memberId"}}],
-    "activeStep": "instanceId",
+    "activeStep": "instanceId (화면에서 보고 있는 단계)",
     "taskStatus": {"instanceId-todoIdx": true},
     "notes": {"instanceId": "text"},
     "versionName": "v1.0",
@@ -50,6 +59,10 @@
 ```
 
 ## 주요 기능 현황
+- [x] 팀 대시보드 (첫 화면 탭 + 팀원용 dashboard.html, 요약 카드 필터·PM 필터·정렬·검색)
+- [x] 프로젝트 정보 (발주처/PM/시작일/납품일/상태) + 프로젝트 삭제
+- [x] 현재 단계 명시 지정 + 단계 예정일 + 지연 자동 판정
+- [x] 템플릿 (appState.templates, localStorage) 추가/편집/삭제/적용, 워크플로우→템플릿 저장, 빈 단계 만들기
 - [x] 다중 프로젝트 관리 (로컬스토리지 + GitHub 자동 동기화)
 - [x] 과업 라이브러리 드로어 (우측 슬라이드, `+ 과업 추가` 버튼으로 진입)
 - [x] 워크플로우 타임라인 뷰 (원형 스텝 번호 + 수직 연결선, 활성/완료 강조)
@@ -78,3 +91,8 @@ CSS 변수: `--canvas` `--surface-soft` `--ink-deep` `--ink` `--primary(#0064e0)
 - `participant.html`: raw GitHub URL로 JSON fetch (인증 불필요). 쓰기 시 별도 PAT 필요
 - 프로젝트 버전 저장 흐름: `openVersionSuggestModal()` → `confirmVersionSave()`
 - `renderDetail()`에서 participants 있을 때만 담당자 드롭다운 + 요청 버튼 렌더링
+- **activeStep vs currentStep**: activeStep=화면에서 선택(보기)한 단계, currentStep=실제 진행 단계(대시보드 표시). `setCurrentStep()`은 상태가 '준비'면 '진행'으로 바꿈
+- **지연 판정** (`PMDash.summarize`): 상태가 준비/진행이면서 납품일 경과 또는 현재 단계 예정일 경과(미완료)
+- **텍스트 입력 저장 규칙**: 프로젝트명·폴더·발주처·PM은 input 시 로컬만 저장, change(입력 완료) 시 GitHub 동기화 — 입력 중간 이름으로 파일 생성 방지
+- **GitHub 헬퍼**: `ghPut` / `ghDelete` / `ghGetSha`. 동기화 성공 후 `syncedPath`가 바뀌었으면 이전 파일 삭제, 이어서 `syncDashboardSummary()` (내용 변경 시에만 커밋)
+- `render(full=true)`는 워크플로우 탭으로 전환함. 초기 로드는 `render();applyTab('dashboard')`
